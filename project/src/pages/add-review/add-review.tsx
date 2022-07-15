@@ -1,5 +1,7 @@
 import Logo from '../../components/logo/logo';
 import UserBlock from '../../components/user-block/user-block';
+import Breadcrumbs from '../../components/breadcrumbs/breadcrumbs';
+import {useParams} from 'react-router-dom';
 
 type AddReviewProps = {
   title: string,
@@ -8,7 +10,7 @@ type AddReviewProps = {
 };
 
 function AddReview({title, imgBackgroundSrc, imgPosterSrc}: AddReviewProps): JSX.Element {
-
+  const {id} = useParams();
   return (
     <section className="film-card film-card--full">
       <div className="film-card__header">
@@ -17,20 +19,11 @@ function AddReview({title, imgBackgroundSrc, imgPosterSrc}: AddReviewProps): JSX
         </div>
 
         <h1 className="visually-hidden">WTW</h1>
+        <div className="visually-hidden">{id}</div>
 
         <header className="page-header">
           <Logo/>
-
-          <nav className="breadcrumbs">
-            <ul className="breadcrumbs__list">
-              <li className="breadcrumbs__item">
-                <a href="film-page.html" className="breadcrumbs__link">The Grand Budapest Hotel</a>
-              </li>
-              <li className="breadcrumbs__item">
-                <a className="breadcrumbs__link">Add review</a>
-              </li>
-            </ul>
-          </nav>
+          <Breadcrumbs pathItems={breadcrumbsItems}/>
           <UserBlock/>
         </header>
 
@@ -92,3 +85,14 @@ function AddReview({title, imgBackgroundSrc, imgPosterSrc}: AddReviewProps): JSX
 AddReview.defaultProps = {};
 
 export default AddReview;
+
+const breadcrumbsItems = [
+  {
+    title: 'The Grand Budapest Hotel',
+    path: 'film-page.html'
+  },
+  {
+    title: 'Add review',
+    path: ''
+  }
+];

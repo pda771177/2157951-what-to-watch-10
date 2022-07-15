@@ -1,16 +1,17 @@
-type FilmCardDescriptionProps = {
-  title: string,
-  genre: string,
-  year?: number,
-  review?: boolean
-};
+import {TTitleGenreYear} from '../../types/types';
 
-function FilmCardDescription({title, genre, review, year}: FilmCardDescriptionProps): JSX.Element {
+type FilmCardDescriptionProps = {
+  filmId?: string,
+  review?: boolean
+} & TTitleGenreYear;
+
+function FilmCardDescription({filmId, title, genre, review, year}: FilmCardDescriptionProps): JSX.Element {
 
   const reviewClassName = review ? 'btn film-card__button' : 'btn film-card__button visually-hidden';
 
   return (
     <div className="film-card__desc">
+      <div className="visually-hidden">{filmId}</div>
       <h2 className="film-card__title">{title}</h2>
       <p className="film-card__meta">
         <span className="film-card__genre">{genre}</span>

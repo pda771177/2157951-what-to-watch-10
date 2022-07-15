@@ -1,19 +1,25 @@
 import React from 'react';
+import {TTitleGenreYear} from '../../types/types';
 import Logo from '../../components/logo/logo';
 import Copyright from '../../components/copyright/copyright';
 import UserBlock from '../../components/user-block/user-block';
 import FilmCardDescription from '../../components/film-card-description/film-card-description';
 import SmallFilmsList from '../../components/small-films-list/small-films-list';
 import FilmRating from '../../components/film-rating/film-rating';
+import {useParams} from 'react-router-dom';
 
-type FilmProps = {
-  title: string,
-  genre: string,
-  year: number
-};
+type FilmProps = TTitleGenreYear;
 
 function Film({title, genre, year}: FilmProps): JSX.Element {
+  const {id} = useParams();
 
+  const filmsList = [{
+    title: 'Fantastic Beasts: The Crimes of Grindelwald',
+    imgSrc: 'img/fantastic-beasts-the-crimes-of-grindelwald.jpg'
+  }, {title: 'Bohemian Rhapsody', imgSrc: 'img/bohemian-rhapsody.jpg'}, {
+    title: 'Macbeth',
+    imgSrc: 'img/macbeth.jpg'
+  }, {title: 'Aviator', imgSrc: 'img/aviator.jpg'}];
   return (
     <React.Fragment>
       <section className="film-card film-card--full">
@@ -23,6 +29,7 @@ function Film({title, genre, year}: FilmProps): JSX.Element {
           </div>
 
           <h1 className="visually-hidden">WTW</h1>
+          <h1 className="visually-hidden">{id}</h1>
 
           <header className="page-header film-card__head">
             <Logo/>
@@ -30,7 +37,7 @@ function Film({title, genre, year}: FilmProps): JSX.Element {
           </header>
 
           <div className="film-card__wrap">
-            <FilmCardDescription title={title} genre={genre} year={year} review/>
+            <FilmCardDescription filmId={id} title={title} genre={genre} year={year} review/>
           </div>
         </div>
 
@@ -58,18 +65,12 @@ function Film({title, genre, year}: FilmProps): JSX.Element {
               <FilmRating ratingScore={8.9} voted={240}/>
 
               <div className="film-card__text">
-                <p>In the 1930s, the Grand Budapest Hotel is a popular European ski resort, presided over by concierge
-                  Gustave H. (Ralph Fiennes). Zero, a junior lobby boy, becomes Gustave's friend and protege.</p>
-
-                <p>Gustave prides himself on providing first-class service to the hotel's guests, including satisfying
-                  the
-                  sexual needs of the many elderly women who stay there. When one of Gustave's lovers dies mysteriously,
-                  Gustave finds himself the recipient of a priceless painting and the chief suspect in her murder.</p>
+                <p>In the 1930s, the Grand Budapest Hotel is a popular European ski resort, presided over by concierge Gustave H. (Ralph Fiennes). Zero, a junior lobby boy, becomes Gustave{'\''}s friend and protege.</p>
+                <p>Gustave prides himself on providing first-class service to the hotel{'\''}s guests, including satisfying the sexual needs of the many elderly women who stay there. When one of Gustave{'\''}s lovers dies mysteriously, Gustave finds himself the recipient of a priceless painting and the chief suspect in her murder.</p>
 
                 <p className="film-card__director"><strong>Director: Wes Anderson</strong></p>
 
-                <p className="film-card__starring"><strong>Starring: Bill Murray, Edward Norton, Jude Law, Willem Dafoe
-                  and other</strong></p>
+                <p className="film-card__starring"><strong>Starring: Bill Murray, Edward Norton, Jude Law, Willem Dafoe and other</strong></p>
               </div>
             </div>
           </div>
@@ -81,13 +82,7 @@ function Film({title, genre, year}: FilmProps): JSX.Element {
           <h2 className="catalog__title">More like this</h2>
 
           <div className="catalog__films-list">
-            <SmallFilmsList filmsList={[{
-              title: 'Fantastic Beasts: The Crimes of Grindelwald',
-              imgSrc: 'img/fantastic-beasts-the-crimes-of-grindelwald.jpg'
-            }, {title: 'Bohemian Rhapsody', imgSrc: 'img/bohemian-rhapsody.jpg'}, {
-              title: 'Macbeth',
-              imgSrc: 'img/macbeth.jpg'
-            }, {title: 'Aviator', imgSrc: 'img/aviator.jpg'}]}/>
+            <SmallFilmsList filmsList={filmsList}/>
           </div>
         </section>
 

@@ -1,9 +1,6 @@
-type SmallFilmCardProps = {
-  imgSrc: string,
-  imgWidth?: string,
-  imgHeight?: string,
-  title: string
-};
+import {TFilmCard} from '../../types/types';
+
+type SmallFilmCardProps = TFilmCard;
 
 function SmallFilmCard({title, imgSrc, imgWidth = '0', imgHeight = '0'}: SmallFilmCardProps): JSX.Element {
 
