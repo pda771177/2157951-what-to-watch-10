@@ -1,17 +1,8 @@
+import React from 'react';
+import {TFilmsList} from '../../types/types';
 import SmallFilmCard from '../small-film-card/small-film-card';
 
-type SmallFilmCardProps = {
-  imgSrc: string,
-  imgWidth?: string,
-  imgHeight?: string,
-  title: string
-};
-
-type SmallFilmsListProps = {
-  filmsList: SmallFilmCardProps[]
-};
-
-function SmallFilmsList({filmsList}: SmallFilmsListProps): JSX.Element {
+function SmallFilmsList({filmsList}: TFilmsList): JSX.Element {
   const out = [];
   const result: JSX.Element[] = [];
 

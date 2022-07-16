@@ -1440,3 +1440,11 @@ main {
   color: #fff;
   background: #fd612ead;
   border-radius: 15px; }
+
+.not-found-404-page__content {
+  max-width: 480px;
+  margin: 0 auto;
+  padding-top: 80px;
+  padding-bottom: 165px; }
+
+.not-found-404-page__content{max-width: 20em;margin: 0 auto;padding-top: 80px;padding-bottom: 165px;}

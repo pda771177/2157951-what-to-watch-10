@@ -1,11 +1,14 @@
+import {useParams} from 'react-router-dom';
+
 type PlayerProps = {
   videoSrc: string
 };
 
 function Player({videoSrc}: PlayerProps): JSX.Element {
-
+  const {id} = useParams();
   return (
     <div className="player">
+      <div className="visually-hidden">{id}</div>
       <video src={videoSrc} className="player__video" poster="img/player-poster.jpg"></video>
 
       <button type="button" className="player__exit">Exit</button>
