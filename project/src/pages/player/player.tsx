@@ -1,17 +1,23 @@
-import {useParams} from 'react-router-dom';
+import {useParams, useNavigate} from 'react-router-dom';
+import {TFilm} from '../../types/types';
+import films from '../../mocks/films';
 
 type PlayerProps = {
-  videoSrc: string
+  film?: TFilm
 };
 
-function Player({videoSrc}: PlayerProps): JSX.Element {
+function Player({film}: PlayerProps): JSX.Element {
   const {id} = useParams();
+  const [filmFromParams] = films.filter((item) => item.id.toString() === id?.replace(':', ''));
+  const filmToPlay = film ? film : filmFromParams;
+  const getTimeFromMins = (mins: number): string => `${(Math.trunc(mins / 60))}:${(mins % 60)}:00`;
+  const navigate = useNavigate();
   return (
     <div className="player">
       <div className="visually-hidden">{id}</div>
-      <video src={videoSrc} className="player__video" poster="img/player-poster.jpg"></video>
+      <video src={filmToPlay.videoLink} className="player__video" poster={filmToPlay.previewImage}></video>
 
-      <button type="button" className="player__exit">Exit</button>
+      <button type="button" className="player__exit" onClick={()=>navigate('/')}>Exit</button>
 
       <div className="player__controls">
         <div className="player__controls-row">
@@ -19,7 +25,7 @@ function Player({videoSrc}: PlayerProps): JSX.Element {
             <progress className="player__progress" value="30" max="100"></progress>
             <div className="player__toggler" style={{left: '30%'}}>Toggler</div>
           </div>
-          <div className="player__time-value">1:30:29</div>
+          <div className="player__time-value">{getTimeFromMins(filmToPlay.runTime)}</div>
         </div>
 
         <div className="player__controls-row">
@@ -29,7 +35,7 @@ function Player({videoSrc}: PlayerProps): JSX.Element {
             </svg>
             <span>Play</span>
           </button>
-          <div className="player__name">Transpotting</div>
+          <div className="player__name">{filmToPlay.name}</div>
 
           <button type="button" className="player__full-screen">
             <svg viewBox="0 0 27 27" width="27" height="27">
@@ -42,6 +48,7 @@ function Player({videoSrc}: PlayerProps): JSX.Element {
     </div>
   );
 }
+
 Player.defaultProps = {};
 
 export default Player;

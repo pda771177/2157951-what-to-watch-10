@@ -1,18 +1,24 @@
 import React from 'react';
-import {TFilmsList} from '../../types/types';
+import {TFilm} from '../../types/types';
 import SmallFilmCard from '../small-film-card/small-film-card';
 
-function SmallFilmsList({filmsList}: TFilmsList): JSX.Element {
+type SmallFilmsListProps = {
+  films: TFilm[]
+};
+
+function SmallFilmsList({films}: SmallFilmsListProps): JSX.Element {
   const out = [];
   const result: JSX.Element[] = [];
+  const [hoveredFilm, setHoveredFilm] = React.useState<TFilm>();
+  if(hoveredFilm){hoveredFilm.id++;hoveredFilm.id--;}
 
   const generateKey = (prefix?: string): string => Math.random().toString(36).replace('0.', prefix ?? '');
 
-  filmsList.forEach(({title, imgSrc, imgHeight, imgWidth}) => {
+  films.forEach((film: TFilm) => {
     try {
-      result.push(<SmallFilmCard title={title} imgSrc={imgSrc} imgWidth={imgWidth} imgHeight={imgHeight} key={generateKey(title)}/>);
+      result.push(<SmallFilmCard onMouseOver={() => setHoveredFilm(film)} film={film} key={generateKey(film.name)}/>);
     } catch (error) {
-      out.push({title, imgSrc, imgHeight, imgWidth, error});
+      out.push({...film, error});
     }
   });
 
@@ -22,5 +28,7 @@ function SmallFilmsList({filmsList}: TFilmsList): JSX.Element {
     </div>
   );
 }
+
+SmallFilmsList.defaultProps = {};
 
 export default SmallFilmsList;

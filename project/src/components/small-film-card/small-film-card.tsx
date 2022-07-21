@@ -1,20 +1,24 @@
-import {TFilmCard} from '../../types/types';
+import {TFilm} from '../../types/types';
+import {Link} from 'react-router-dom';
+import React from 'react';
 
-type SmallFilmCardProps = TFilmCard;
+type SmallFilmCardProps = { film: TFilm, onMouseOver: ()=>void} & { imgWidth?: string, imgHeight?: string };
 
-function SmallFilmCard({title, imgSrc, imgWidth = '0', imgHeight = '0'}: SmallFilmCardProps): JSX.Element {
+function SmallFilmCard({film, onMouseOver, imgWidth = '0', imgHeight = '0'}: SmallFilmCardProps): JSX.Element {
+  const {previewImage, name, id} = film;
 
   return (
-    <article className='small-film-card catalog__films-card'>
+    <article onMouseOver={onMouseOver} className='small-film-card catalog__films-card'>
       <div className='small-film-card__image'>
-        <img src={imgSrc} alt={title} width={imgWidth} height={imgHeight}/>
+        <img src={previewImage} alt={name} width={imgWidth} height={imgHeight}/>
       </div>
       <h3 className='small-film-card__title'>
-        <a className='small-film-card__link' href='film-page.html'>{title}</a>
+        <Link className='small-film-card__link' to={`/films/:${id}`}>{name}</Link>
       </h3>
     </article>
   );
 }
+
 SmallFilmCard.defaultProps = {imgSrc: '', imgWidth: '280', imgHeight: '175', title: ''};
 
 export default SmallFilmCard;
