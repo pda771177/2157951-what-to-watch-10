@@ -1,14 +1,17 @@
 import React from 'react';
-import {TFilmsList} from '../../types/types';
+import {TFilm} from '../../types/types';
 import Logo from '../../components/logo/logo';
 import Copyright from '../../components/copyright/copyright';
 import UserBlock from '../../components/user-block/user-block';
 import SmallFilmsList from '../../components/small-films-list/small-films-list';
 import Breadcrumbs from '../../components/breadcrumbs/breadcrumbs';
 
-type NotFound404Props = TFilmsList & {text?: string};
+type NotFound404Props = {
+  films: TFilm[],
+  text?: string
+};
 
-function NotFound404({text, filmsList}: NotFound404Props): JSX.Element {
+function NotFound404({text, films}: NotFound404Props): JSX.Element {
 
   return (
     <div className="user-page">
@@ -25,7 +28,7 @@ function NotFound404({text, filmsList}: NotFound404Props): JSX.Element {
         </section>
         <section className="catalog">
           <h2 className="catalog__title">Trending Now</h2>
-          <SmallFilmsList filmsList={filmsList}/>
+          <SmallFilmsList films={films}/>
         </section>
 
         <footer className="page-footer">

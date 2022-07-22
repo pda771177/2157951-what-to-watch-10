@@ -1,25 +1,31 @@
-import {TTitleGenreYear} from '../../types/types';
+import {TFilm} from '../../types/types';
+import {useNavigate} from 'react-router-dom';
 
 type FilmCardDescriptionProps = {
-  filmId?: string,
+  film: TFilm
   review?: boolean
-} & TTitleGenreYear;
+};
 
-function FilmCardDescription({filmId, title, genre, review, year}: FilmCardDescriptionProps): JSX.Element {
+function FilmCardDescription({film, review}: FilmCardDescriptionProps): JSX.Element {
+  const {id, name, genre, released} = film;
+  const navigate = useNavigate();
 
   const reviewClassName = review ? 'btn film-card__button' : 'btn film-card__button visually-hidden';
 
+  const onPlayClick = () => {
+    navigate(`/player/:${film.id.toString()}`);
+  };
   return (
     <div className="film-card__desc">
-      <div className="visually-hidden">{filmId}</div>
-      <h2 className="film-card__title">{title}</h2>
+      <div className="visually-hidden">{id}</div>
+      <h2 className="film-card__title">{name}</h2>
       <p className="film-card__meta">
         <span className="film-card__genre">{genre}</span>
-        <span className="film-card__year">{year ? year.toString() : ''}</span>
+        <span className="film-card__year">{released ? released.toString() : ''}</span>
       </p>
 
       <div className="film-card__buttons">
-        <button className="btn btn--play film-card__button" type="button">
+        <button onClick={onPlayClick} className="btn btn--play film-card__button" type="button">
           <svg viewBox="0 0 19 19" width="19" height="19">
             <use xlinkHref="#play-s"></use>
           </svg>

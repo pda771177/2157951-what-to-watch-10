@@ -1,16 +1,24 @@
-export type TFilmCard = {
-  imgSrc: string,
-  imgWidth?: string,
-  imgHeight?: string,
-  title: string
-};
-
-export type TFilmsList = {
-  filmsList: TFilmCard[]
-};
-
-export type TTitleGenreYear = {
-  title: string,
+export type TFilm = {
+  id: number,
+  name: string,
+  posterImage: string,
+  previewImage: string,
+  backgroundImage: string,
+  backgroundColor: string,
+  videoLink: string,
+  previewVideoLink: string,
+  description: string,
+  rating: number,
+  scoresCount: number,
+  director: string,
+  starring: string[],
+  runTime: number,
   genre: string,
-  year?: number
-}
+  released: number,
+  isFavorite: boolean
+};
+
+export type TComment = {
+  comment: string,
+  rating: number
+};
