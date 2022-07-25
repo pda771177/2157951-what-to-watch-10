@@ -1,16 +1,28 @@
 import {TFilm} from '../../types/types';
 import {Link} from 'react-router-dom';
-import React from 'react';
+import React, {useState} from 'react';
+import Videoplayer from '../videoplayer/videoplayer';
 
-type SmallFilmCardProps = { film: TFilm, onMouseOver: ()=>void} & { imgWidth?: string, imgHeight?: string };
+type SmallFilmCardProps = {
+  film: TFilm,
+  onMouseOver: ()=>void,
+  play?: boolean,
+  imgWidth?: string,
+  imgHeight?: string
+};
 
-function SmallFilmCard({film, onMouseOver, imgWidth = '0', imgHeight = '0'}: SmallFilmCardProps): JSX.Element {
+function SmallFilmCard({film, play, onMouseOver, imgWidth = '280', imgHeight = '175'}: SmallFilmCardProps): JSX.Element {
   const {previewImage, name, id} = film;
+  const [haveFocus, setHaveFocus] = useState(false);
+
+  const changeFocus = () => {
+    setHaveFocus(!haveFocus);
+  };
 
   return (
     <article onMouseOver={onMouseOver} className='small-film-card catalog__films-card'>
-      <div className='small-film-card__image'>
-        <img src={previewImage} alt={name} width={imgWidth} height={imgHeight}/>
+      <div onMouseOver={changeFocus} onMouseLeave={changeFocus} className='small-film-card__image'>
+        {haveFocus ? <Videoplayer film={film} width={Number(imgWidth)} height={Number(imgHeight)} delay={1000} autoPlay mute/> : <img src={previewImage} alt={name} width={imgWidth} height={imgHeight}/>}
       </div>
       <h3 className='small-film-card__title'>
         <Link className='small-film-card__link' to={`/films/:${id}`}>{name}</Link>
@@ -19,6 +31,6 @@ function SmallFilmCard({film, onMouseOver, imgWidth = '0', imgHeight = '0'}: Sma
   );
 }
 
-SmallFilmCard.defaultProps = {imgSrc: '', imgWidth: '280', imgHeight: '175', title: ''};
+SmallFilmCard.defaultProps = {imgWidth: '280', imgHeight: '175'};
 
 export default SmallFilmCard;
