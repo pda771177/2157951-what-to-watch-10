@@ -8,6 +8,7 @@ import FilmRating from '../../components/film-rating/film-rating';
 import {useParams} from 'react-router-dom';
 import films from '../../mocks/films';
 import similar from '../../mocks/similar';
+import FilmNavigation from '../../components/film-nav/film-nav';
 
 
 function Film(): JSX.Element {
@@ -43,27 +44,7 @@ function Film(): JSX.Element {
             </div>
 
             <div className="film-card__desc">
-              <nav className="film-nav film-card__nav">
-                <ul className="film-nav__list">
-                  <li className="film-nav__item film-nav__item--active">
-                    <a href="#" className="film-nav__link">Overview</a>
-                  </li>
-                  <li className="film-nav__item">
-                    <a href="#" className="film-nav__link">Details</a>
-                  </li>
-                  <li className="film-nav__item">
-                    <a href="#" className="film-nav__link">Reviews</a>
-                  </li>
-                </ul>
-              </nav>
-
-              <FilmRating ratingScore={film.rating} voted={film.scoresCount}/>
-
-              <div className="film-card__text">
-                <p>{film.description}</p>
-                <p className="film-card__director"><strong>Director: {film.director}</strong></p>
-                <p className="film-card__starring"><strong>Starring: {film.starring.toString().replace(',', ', ')} and other</strong></p>
-              </div>
+              <FilmNavigation film={film} />
             </div>
           </div>
         </div>
