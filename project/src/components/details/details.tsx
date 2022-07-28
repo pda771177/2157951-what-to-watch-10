@@ -1,5 +1,5 @@
 import React from 'react';
-import {TFilm} from "../../types/types";
+import {TFilm} from '../../types/types';
 
 type DetailsProps = {
   film: TFilm
@@ -7,7 +7,7 @@ type DetailsProps = {
 
 function Details({film}: DetailsProps): JSX.Element {
   const {director, genre, released, starring, runTime} = film;
-  const starringJsx: JSX.Element[] = starring.map((actor) => <div>{actor}</div>);
+  const starringJsx: JSX.Element[] = starring.map((actor) => <div key={actor}>{actor}</div>);
   const getTimeFromMins = (mins: number): string => `${(Math.trunc(mins / 60))}h ${(mins % 60)}m`;
 
   return (

@@ -1,6 +1,6 @@
 import {useParams, useNavigate} from 'react-router-dom';
 import {TFilm} from '../../types/types';
-import films from '../../mocks/films';
+import {useAppSelector} from '../../hooks';
 
 type PlayerProps = {
   film?: TFilm
@@ -8,7 +8,8 @@ type PlayerProps = {
 
 function Player({film}: PlayerProps): JSX.Element {
   const {id} = useParams();
-  const [filmFromParams] = films.filter((item) => item.id.toString() === id?.replace(':', ''));
+  const allFilms = useAppSelector((state) => state.allFilmsList);
+  const [filmFromParams] = allFilms.filter((item) => item.id.toString() === id?.replace(':', ''));
   const filmToPlay = film ? film : filmFromParams;
   const getTimeFromMins = (mins: number): string => `${(Math.trunc(mins / 60))}:${(mins % 60)}:00`;
   const navigate = useNavigate();

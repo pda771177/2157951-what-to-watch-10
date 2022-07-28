@@ -4,17 +4,17 @@ import Copyright from '../../components/copyright/copyright';
 import UserBlock from '../../components/user-block/user-block';
 import FilmCardDescription from '../../components/film-card-description/film-card-description';
 import SmallFilmsList from '../../components/small-films-list/small-films-list';
-import FilmRating from '../../components/film-rating/film-rating';
 import {useParams} from 'react-router-dom';
-import films from '../../mocks/films';
 import similar from '../../mocks/similar';
 import FilmNavigation from '../../components/film-nav/film-nav';
+import {useAppSelector} from '../../hooks';
 
 
 function Film(): JSX.Element {
 
   const {id} = useParams();
-  const [film] = films.filter((item) => item.id.toString() === id?.replace(':', ''));
+  const allFilms = useAppSelector((state) => state.allFilmsList);
+  const [film] = allFilms.filter((item) => item.id.toString() === id?.replace(':', ''));
 
   return (
     <React.Fragment>
