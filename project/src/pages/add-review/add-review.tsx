@@ -3,10 +3,9 @@ import UserBlock from '../../components/user-block/user-block';
 import Breadcrumbs from '../../components/breadcrumbs/breadcrumbs';
 import {useParams} from 'react-router-dom';
 import {TFilm} from '../../types/types';
-import films from '../../mocks/films';
-import React, {SyntheticEvent} from 'react';
-import StarRating from '../../components/star-rating/star-rating';
-import ReviewForm from "../../components/review-form/review-form";
+import React from 'react';
+import ReviewForm from '../../components/review-form/review-form';
+import {useAppSelector} from "../../hooks";
 
 type AddReviewProps = {
   film?: TFilm
@@ -14,7 +13,8 @@ type AddReviewProps = {
 
 function AddReview({film}: AddReviewProps): JSX.Element {
   const {id} = useParams();
-  const [filmFromParams] = films.filter((item) => item.id.toString() === id?.replace(':', ''));
+  const allFilms = useAppSelector((state) => state.allFilmsList);
+  const [filmFromParams] = allFilms.filter((item) => item.id.toString() === id?.replace(':', ''));
   const filmToReview = film ? film : filmFromParams;
 
   return (
