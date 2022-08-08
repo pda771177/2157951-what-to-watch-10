@@ -1,8 +1,8 @@
 import React from 'react';
 import {TFilm} from '../../types/types';
-import SmallFilmsList from '../small-films-list/small-films-list';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {changeGenre} from '../../store/action';
+import SmallFilmListSizer from '../small-film-list-sizer/small-film-list-sizer';
 
 type GenreSelectorProps = {
   films: TFilm[]
@@ -40,7 +40,7 @@ function GenreSelector({films}: GenreSelectorProps): JSX.Element {
         </li>
         {result}
       </ul>
-      <SmallFilmsList films={genredFilms}/>
+      <SmallFilmListSizer films={genredFilms}/>
     </React.Fragment>
   );
 }
