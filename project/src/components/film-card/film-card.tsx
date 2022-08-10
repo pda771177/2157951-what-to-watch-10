@@ -3,10 +3,21 @@ import {TFilm} from '../../types/types';
 import Logo from '../logo/logo';
 import FilmCardDescription from '../film-card-description/film-card-description';
 
-type FilmCardProps = { film: TFilm, imgPosterWidth?: string, imgPosterHeight?: string };
+type FilmCardProps = { film?: TFilm | null | undefined, imgPosterWidth?: string, imgPosterHeight?: string };
 
 function FilmCard({film, imgPosterWidth = '0', imgPosterHeight = '0'}: FilmCardProps): JSX.Element {
+  if(!film) {
+    return (
+      <header className="page-header film-card__head">
+        <Logo/>
+        <UserBlock/>
+      </header>
+    );
+  }
+
   const {id, posterImage, backgroundImage, name} = film;
+
+
   return (
     <section className="film-card">
       <div className="film-card__bg">

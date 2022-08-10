@@ -1,20 +1,14 @@
 import React from 'react';
-import {TFilm} from '../../types/types';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {changeGenre} from '../../store/action';
 import SmallFilmListSizer from '../small-film-list-sizer/small-film-list-sizer';
 
-type GenreSelectorProps = {
-  films: TFilm[]
-};
-
-function GenreSelector({films}: GenreSelectorProps): JSX.Element {
-  const genres: Set<string> = new Set(films.map((film) => film.genre));
+function GenreSelector(): JSX.Element {
+  const {genre, allFilmsList, genredFilmsList} = useAppSelector((state) => state);
+  const genres: Set<string> = new Set(allFilmsList.map((film) => film.genre));
   const out = [];
   const result: JSX.Element[] = [];
 
-  const genre = useAppSelector((state) => state.genre);
-  const genredFilms = useAppSelector((state) => state.genredFilmsList);
   const dispatch = useAppDispatch();
 
   const getSelectedClass = (genreStr: string, currentGenre: string) => currentGenre === genreStr ? 'catalog__genres-item catalog__genres-item--active' : 'catalog__genres-item';
@@ -31,7 +25,6 @@ function GenreSelector({films}: GenreSelectorProps): JSX.Element {
     }
   });
 
-
   return (
     <React.Fragment>
       <ul className="catalog__genres-list">
@@ -40,7 +33,7 @@ function GenreSelector({films}: GenreSelectorProps): JSX.Element {
         </li>
         {result}
       </ul>
-      <SmallFilmListSizer films={genredFilms}/>
+      <SmallFilmListSizer films={genredFilmsList}/>
     </React.Fragment>
   );
 }
