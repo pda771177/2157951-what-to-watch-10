@@ -1,21 +1,27 @@
 import {createReducer} from '@reduxjs/toolkit';
-import films from '../mocks/films';
-import {changeGenre, loadFilms, loadPromo, selectFilmsByGenre} from './action';
+import {changeGenre, loadFilms, loadPromo, requireAuthorization, selectFilmsByGenre, setError, setDataLoadedStatus} from './action';
 import {TFilm} from '../types/types';
-import promo from "../mocks/promo";
+import promo from '../mocks/promo';
+import {AuthorizationStatus} from '../consts';
 
 type TState = {
   genre: string,
   allFilmsList: TFilm[],
   genredFilmsList: TFilm[],
-  promoFilm: TFilm
+  promoFilm: TFilm | null,
+  authorizationStatus: string,
+  error: string | null,
+  isDataLoaded: boolean
 };
 
 const initialState: TState = {
-  allFilmsList: films,
+  allFilmsList: [],
   genre: 'All genres',
-  genredFilmsList: films,
-  promoFilm: promo
+  genredFilmsList: [],
+  promoFilm: null,
+  authorizationStatus: AuthorizationStatus.Unknown,
+  error: null,
+  isDataLoaded: false
 };
 
 function filterByGenre(filmsList: TFilm[], genre: string): TFilm[] {
@@ -27,9 +33,10 @@ const reducer = createReducer(initialState, (builder) => {
   builder
     .addCase(loadFilms, (state, action) => {
       state.allFilmsList = action.payload;
+      state.genredFilmsList = filterByGenre(state.allFilmsList, state.genre);
     })
     .addCase(loadPromo, (state, action) => {
-      state.promoFilm = action.payload
+      state.promoFilm = action.payload;
     })
     .addCase(changeGenre, (state, action) => {
       state.genre = action.payload;
@@ -37,6 +44,15 @@ const reducer = createReducer(initialState, (builder) => {
     })
     .addCase(selectFilmsByGenre, (state: TState) => {
       state.genredFilmsList = filterByGenre(state.allFilmsList, state.genre);
+    })
+    .addCase(requireAuthorization, (state, action) => {
+      state.authorizationStatus = action.payload;
+    })
+    .addCase(setError, (state, action)=>{
+      state.error = action.payload;
+    })
+    .addCase(setDataLoadedStatus, (state, action) => {
+      state.isDataLoaded = action.payload;
     });
 });
 

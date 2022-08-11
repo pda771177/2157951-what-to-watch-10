@@ -1,13 +1,13 @@
 import React from 'react';
 
 type ShowMoreButtonProps = {
-  onClick: any,
+  onClick: ()=>void,
   visible: boolean
 };
 
 function ShowMoreButton({onClick, visible}: ShowMoreButtonProps): JSX.Element {
 
-  const className = visible ? 'catalog__more' : 'catalog__more visually-hidden'
+  const className = visible ? 'catalog__more' : 'catalog__more visually-hidden';
 
   return (
     <div className={className}>
