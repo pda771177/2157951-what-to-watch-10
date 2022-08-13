@@ -1,13 +1,14 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import {AppDispatch, State} from '../types/state';
 import {AxiosInstance} from 'axios';
-import {APIRoute, AuthorizationStatus, TIMEOUT_SHOW_ERROR} from '../consts';
-import {requireAuthorization, loadFilms, loadPromo, setError, setDataLoadedStatus} from './action';
+import {APIRoute, AppRoute, AuthorizationStatus, TIMEOUT_SHOW_ERROR} from '../consts';
+import {loadFilms, loadPromo, redirectToRoute, requireAuthorization, setDataLoadedStatus, setError} from './action';
 import {AuthData} from '../types/auth-data';
 import {UserData} from '../types/user-data';
-import {dropToken, saveToken} from '../services/token';
+import {dropUser, getUserToken, saveUser} from '../services/localStorageUser';
 import {store} from './index';
 import {TFilm} from '../types/types';
+import {useNavigate} from "react-router-dom";
 
 export const loadFilmsAction = createAsyncThunk<void, undefined, {
   dispatch: AppDispatch,
@@ -80,12 +81,14 @@ export const loginAction = createAsyncThunk<void, AuthData, {
   state: State,
   extra: AxiosInstance
 }>(
-  'user/login',
+  'USER_LOGIN',
   async ({login: email, password}, {dispatch, extra: api}) => {
-    const {data: {token}} = await api.post<UserData>(APIRoute.Login, {email, password});
-    saveToken(token);
+    const {data: user} = await api.post<UserData>(APIRoute.Login, {email, password});
+    if(!user) return;
+    saveUser(user);
     dispatch(requireAuthorization(AuthorizationStatus.Auth));
-  },
+    dispatch(redirectToRoute(AppRoute.Main))
+  }
 );
 
 export const logoutAction = createAsyncThunk<void, undefined, {
@@ -93,10 +96,10 @@ export const logoutAction = createAsyncThunk<void, undefined, {
   state: State,
   extra: AxiosInstance
 }>(
-  'user/logout',
+  'USER_LOGOUT',
   async (_arg, {dispatch, extra: api}) => {
     await api.delete(APIRoute.Logout);
-    dropToken();
+    dropUser();
     dispatch(requireAuthorization(AuthorizationStatus.NoAuth));
   },
 );

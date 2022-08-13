@@ -1,7 +1,6 @@
 import {createReducer} from '@reduxjs/toolkit';
 import {changeGenre, loadFilms, loadPromo, requireAuthorization, selectFilmsByGenre, setError, setDataLoadedStatus} from './action';
 import {TFilm} from '../types/types';
-import promo from '../mocks/promo';
 import {AuthorizationStatus} from '../consts';
 
 type TState = {
@@ -9,7 +8,7 @@ type TState = {
   allFilmsList: TFilm[],
   genredFilmsList: TFilm[],
   promoFilm: TFilm | null,
-  authorizationStatus: string,
+  authorizationStatus: AuthorizationStatus,
   error: string | null,
   isDataLoaded: boolean
 };

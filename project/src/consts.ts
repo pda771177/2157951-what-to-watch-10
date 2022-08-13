@@ -12,8 +12,12 @@ export enum APIRoute {
 }
 
 export enum AppRoute {
-  Login = '/login',
-  Root = '/'
+  Main = '/',
+  Film = 'films/:id',
+  SignIn = 'login',
+  MyList = 'MyList',
+  Player = 'player/:id',
+  AddReview = 'films/:id/review'
 }
 
 export const TIMEOUT_SHOW_ERROR = 2000;
