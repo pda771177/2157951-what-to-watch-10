@@ -13,7 +13,7 @@ function MyList({films}: MyListProps): JSX.Element {
       <header className="page-header user-page__head">
         <Logo/>
         <h1 className="page-title user-page__title">My list <span className="user-page__film-count">{films.length}</span></h1>
-        <UserBlock imgAvatarSrc='img/avatar.jpg'/>
+        <UserBlock />
       </header>
 
       <section className="catalog">
