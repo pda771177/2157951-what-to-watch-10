@@ -1,23 +1,24 @@
 import React from 'react';
-import {TFilm} from '../../types/types';
+import {TComment, TFilm} from '../../types/types';
 import Overview from '../overview/overview';
 import Details from '../details/details';
 import Reviews from '../reviews/reviews';
-import comments from '../../mocks/comments';
 
 type FilmNavigationProps = {
-  film: TFilm
+  film: TFilm,
+  comments: TComment[]
 };
 
 const generateKey = (prefix?: string): string => Math.random().toString(36).replace('0.', prefix ?? '');
 
-function FilmNavigation({film}: FilmNavigationProps): JSX.Element {
+function FilmNavigation({film, comments}: FilmNavigationProps): JSX.Element {
   const [selectedTab, setSelectedTab] = React.useState('Overview');
   const tabs: string[] = ['Overview', 'Details', 'Reviews'];
+
   const tabsContent: {[index: string]:JSX.Element} = {
     Overview: <Overview film={film}/>,
     Details: <Details film={film}/>,
-    Reviews: <Reviews film={film} reviews={comments}/>
+    Reviews: <Reviews comments={comments}/>
   };
 
   const result: JSX.Element[] = tabs.map((tab) => {

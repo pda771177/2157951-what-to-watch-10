@@ -6,22 +6,29 @@ import {TFilm} from '../../types/types';
 import React from 'react';
 import ReviewForm from '../../components/review-form/review-form';
 import {useAppSelector} from "../../hooks";
+import {store} from "../../store";
+import {loadFilmAction} from "../../store/api-actions";
+import LoadingScreen from "../loading/loading";
 
-type AddReviewProps = {
-  film?: TFilm
-};
 
-function AddReview({film}: AddReviewProps): JSX.Element {
+
+function AddReview(): JSX.Element {
   const {id} = useParams();
-  const allFilms = useAppSelector((state) => state.allFilmsList);
-  const [filmFromParams] = allFilms.filter((item) => item.id.toString() === id?.replace(':', ''));
-  const filmToReview = film ? film : filmFromParams;
+  const {selectedFilm} = useAppSelector((state) => state);
+  const filmId = id ? id.replace(':', '') : '';
+
+  if (!selectedFilm || selectedFilm.id.toString() !== filmId) {
+    store.dispatch(loadFilmAction(filmId));
+    return (
+      <LoadingScreen/>
+    );
+  }
 
   return (
     <section className="film-card film-card--full">
       <div className="film-card__header">
         <div className="film-card__bg">
-          <img src={filmToReview.backgroundImage} alt={filmToReview.name}/>
+          <img src={selectedFilm.backgroundImage} alt={selectedFilm.name}/>
         </div>
 
         <h1 className="visually-hidden">WTW</h1>
@@ -33,10 +40,10 @@ function AddReview({film}: AddReviewProps): JSX.Element {
         </header>
 
         <div className="film-card__poster film-card__poster--small">
-          <img src={filmToReview.posterImage} alt={filmToReview.name} width="218" height="327"/>
+          <img src={selectedFilm.posterImage} alt={selectedFilm.name} width="218" height="327"/>
         </div>
       </div>
-      <ReviewForm film={filmToReview}/>
+      <ReviewForm film={selectedFilm}/>
     </section>
   );
 }

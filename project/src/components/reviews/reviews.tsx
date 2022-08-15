@@ -3,22 +3,30 @@ import {TComment, TFilm} from '../../types/types';
 import Review from '../review/review';
 
 type ReviewsProps = {
-  film: TFilm,
-  reviews: TComment[]
+  comments: TComment[]
 };
 
-function Reviews({film, reviews}: ReviewsProps): JSX.Element {
+function Reviews({comments}: ReviewsProps): JSX.Element {
+
+  if(!comments.length) return (
+    <p className="film-card__details-name">There are no comments yet</p>
+  )
+
+  const middle = Math.floor(comments.length/2);
+  const leftComments = comments.slice(0,middle);
+  const rightComments = comments.slice(middle,comments.length);
+
+  const leftColumn = leftComments.map(comment => (<Review review={comment}/>))
+  const rightColumn = rightComments.map(comment => (<Review review={comment}/>))
+
+
   return (
     <div className="film-card__reviews film-card__row">
       <div className="film-card__reviews-col">
-        <Review review={reviews[0]}/>
-        <Review review={reviews[1]}/>
-        <Review review={reviews[2]}/>
+        {leftColumn}
       </div>
       <div className="film-card__reviews-col">
-        <Review review={reviews[3]}/>
-        <Review review={reviews[4]}/>
-        <Review review={reviews[5]}/>
+        {rightColumn}
       </div>
     </div>
   );

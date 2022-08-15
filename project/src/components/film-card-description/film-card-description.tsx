@@ -1,5 +1,7 @@
 import {TFilm} from '../../types/types';
 import {useNavigate} from 'react-router-dom';
+import {AppRoute, AuthorizationStatus} from '../../consts';
+import {useAppSelector} from '../../hooks';
 
 type FilmCardDescriptionProps = {
   film: TFilm
@@ -8,13 +10,23 @@ type FilmCardDescriptionProps = {
 
 function FilmCardDescription({film, review}: FilmCardDescriptionProps): JSX.Element {
   const {id, name, genre, released} = film;
+  const {authorizationStatus} = useAppSelector((state) => state);
   const navigate = useNavigate();
 
-  const reviewClassName = review ? 'btn film-card__button' : 'btn film-card__button visually-hidden';
+  const reviewClassName = review === true ? 'btn film-card__button' : 'btn film-card__button visually-hidden';
 
   const onPlayClick = () => {
-    navigate(`/player/:${film.id.toString()}`);
+    if(authorizationStatus === AuthorizationStatus.Auth) {
+      navigate(AppRoute.Player.replace(':id', film.id.toString()));
+    } else {
+      navigate(AppRoute.SignIn);
+    }
   };
+
+  const onAddReviewClick = function () {
+    navigate(AppRoute.AddReview.replace(':id', film.id.toString()));
+  };
+
   return (
     <div className="film-card__desc">
       <div className="visually-hidden">{id}</div>
@@ -38,7 +50,7 @@ function FilmCardDescription({film, review}: FilmCardDescriptionProps): JSX.Elem
           <span>My list</span>
           <span className="film-card__count">9</span>
         </button>
-        <a href="add-review.html" className={reviewClassName}>Add review</a>
+        <a onClick={onAddReviewClick} className={reviewClassName}>Add review</a>
       </div>
     </div>
   );
