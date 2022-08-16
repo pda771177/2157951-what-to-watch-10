@@ -5,27 +5,38 @@ import UserBlock from '../../components/user-block/user-block';
 import FilmCardDescription from '../../components/film-card-description/film-card-description';
 import SmallFilmsList from '../../components/small-films-list/small-films-list';
 import {useParams} from 'react-router-dom';
-import similar from '../../mocks/similar';
 import FilmNavigation from '../../components/film-nav/film-nav';
 import {useAppSelector} from '../../hooks';
+import {store} from '../../store';
+import {loadFilmAction} from '../../store/api-actions';
+import LoadingScreen from '../loading/loading';
+import {AuthorizationStatus} from '../../consts';
 
 
 function Film(): JSX.Element {
 
   const {id} = useParams();
-  const allFilms = useAppSelector((state) => state.allFilmsList);
-  const [film] = allFilms.filter((item) => item.id.toString() === id?.replace(':', ''));
+  const {selectedFilm, similarFilms, filmComments, authorizationStatus} = useAppSelector((state) => state);
+  const filmId = id ? id.replace(':', '') : '';
 
+  if (!selectedFilm || selectedFilm.id.toString() !== filmId) {
+    store.dispatch(loadFilmAction(filmId));
+    return (
+      <LoadingScreen/>
+    );
+  }
+
+  const similar = similarFilms.filter((film) => film.id.toString() !== filmId);
   return (
     <React.Fragment>
       <section className="film-card film-card--full">
         <div className="film-card__hero">
           <div className="film-card__bg">
-            <img src={film.backgroundImage} alt={film.name}/>
+            <img src={selectedFilm.backgroundImage} alt={selectedFilm.name}/>
           </div>
 
           <h1 className="visually-hidden">WTW</h1>
-          <h1 className="visually-hidden">{film.id}</h1>
+          <h1 className="visually-hidden">{selectedFilm.id}</h1>
 
           <header className="page-header film-card__head">
             <Logo/>
@@ -33,18 +44,18 @@ function Film(): JSX.Element {
           </header>
 
           <div className="film-card__wrap">
-            <FilmCardDescription film={film} review/>
+            <FilmCardDescription film={selectedFilm} review={authorizationStatus === AuthorizationStatus.Auth}/>
           </div>
         </div>
 
         <div className="film-card__wrap film-card__translate-top">
           <div className="film-card__info">
             <div className="film-card__poster film-card__poster--big">
-              <img src={film.posterImage} alt={`${film.name} poster`} width="218" height="327"/>
+              <img src={selectedFilm.posterImage} alt={`${selectedFilm.name} poster`} width="218" height="327"/>
             </div>
 
             <div className="film-card__desc">
-              <FilmNavigation film={film} />
+              <FilmNavigation film={selectedFilm} comments={filmComments}/>
             </div>
           </div>
         </div>
@@ -55,7 +66,7 @@ function Film(): JSX.Element {
           <h2 className="catalog__title">More like this</h2>
 
           <div className="catalog__films-list">
-            <SmallFilmsList films={similar(film.genre)}/>
+            <SmallFilmsList films={similar}/>
           </div>
         </section>
 
