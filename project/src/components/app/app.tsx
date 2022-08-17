@@ -6,7 +6,7 @@ import Player from '../../pages/player/player';
 import AddReview from '../../pages/add-review/add-review';
 import SignIn from '../../pages/sign-in/sign-in';
 import PrivateRoute from '../private-route/private-route';
-import {AppRoute} from '../../consts';
+import {AppRoute, AuthorizationStatus} from '../../consts';
 import MyList from '../../pages/my-list/my-list';
 import NotFound404 from '../../pages/404-not-found/404-not-found';
 import {useAppSelector} from '../../hooks';
@@ -23,13 +23,15 @@ function App(): JSX.Element {
     );
   }
 
+  const isAuthorized = authorizationStatus === AuthorizationStatus.Auth;
+
   return (
     <HistoryRouter history={browserHistory}>
       <Routes>
-        <Route path='/'>
+        <Route path={AppRoute.Main}>
           <Route index element={<Main/>}/>
-          <Route path={AppRoute.SignIn} element={<SignIn/>}/>
-          <Route path={AppRoute.MyList} element={<PrivateRoute authorizationStatus={authorizationStatus}><MyList films={allFilmsList.slice(0, 9)}/></PrivateRoute>}/>
+          <Route path={AppRoute.SignIn} element={isAuthorized ? <Main/> : <SignIn/>}/>
+          <Route path={AppRoute.MyList} element={<PrivateRoute authorizationStatus={authorizationStatus}><MyList /></PrivateRoute>}/>
           <Route path={AppRoute.Film} element={<Film/>}/>
           <Route path={AppRoute.AddReview} element={<AddReview/>}/>
           <Route path={AppRoute.Player} element={<Player/>}/>

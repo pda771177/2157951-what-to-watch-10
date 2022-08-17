@@ -3,17 +3,22 @@ import {AppDispatch, State} from '../types/state';
 import {AxiosInstance} from 'axios';
 import {APIRoute, AppRoute, AuthorizationStatus, TIMEOUT_SHOW_ERROR} from '../consts';
 import {
-  loadFilm, loadFilmComments,
+  changeFavorite,
+  loadFavorites,
+  loadFilm,
+  loadFilmComments,
   loadFilms,
-  loadPromo, loadSimilarFilms,
+  loadPromo,
+  loadSimilarFilms,
   redirectToRoute,
-  requireAuthorization, sendFilmComment,
+  requireAuthorization,
+  sendFilmComment,
   setDataLoadedStatus,
   setError,
 } from './action';
 import {AuthData} from '../types/auth-data';
 import {UserData} from '../types/user-data';
-import {dropUser, getUserToken, saveUser} from '../services/localStorageUser';
+import {dropUser, saveUser} from '../services/localStorageUser';
 import {store} from './index';
 import {TComment, TFilm} from '../types/types';
 
@@ -28,6 +33,49 @@ export const loadFilmsAction = createAsyncThunk<void, undefined, {
       const {data} = await api.get<TFilm[]>(APIRoute.Films);
       dispatch(setDataLoadedStatus(true));
       dispatch(loadFilms(data));
+      if (store.getState().authorizationStatus === AuthorizationStatus.Auth) {
+        const {data: favorites} = await api.get<TFilm[]>(APIRoute.Favorites);
+        dispatch(loadFavorites(favorites));
+      }
+    } catch (e) {
+      //
+    } finally {
+      dispatch(setDataLoadedStatus(false));
+    }
+  }
+);
+
+export const loadFavoritesAction = createAsyncThunk<void, undefined, {
+  dispatch: AppDispatch,
+  state: State,
+  extra: AxiosInstance
+}>(
+  loadFavorites.toString(),
+  async (_arg, {dispatch, extra: api}) => {
+    try {
+      const {data} = await api.get<TFilm[]>(APIRoute.Favorites);
+      dispatch(setDataLoadedStatus(true));
+      dispatch(loadFavorites(data));
+    } catch (e) {
+      //
+    } finally {
+      dispatch(setDataLoadedStatus(false));
+    }
+  }
+);
+
+export const changeFavoriteAction = createAsyncThunk<void, { filmId: number, favorite: boolean }, {
+  dispatch: AppDispatch,
+  state: State,
+  extra: AxiosInstance
+}>(
+  changeFavorite.toString(),
+  async ({filmId, favorite}, {dispatch, extra: api}) => {
+    try {
+      dispatch(setDataLoadedStatus(true));
+      await api.post(APIRoute.ChangeFavorite.replace(':id', filmId.toString()).replace(':status', String(favorite ? 1 : 0)));
+      const {data: favorites} = await api.get<TFilm[]>(APIRoute.Favorites);
+      dispatch(loadFavorites(favorites));
     } catch (e) {
       //
     } finally {
@@ -52,14 +100,14 @@ export const loadFilmAction = createAsyncThunk<void, string, {
       const filmComments = await api.get<TComment[]>(APIRoute.FilmComments.replace(':id', filmId));
       dispatch(loadFilmComments(filmComments.data));
     } catch (e) {
-      dispatch(redirectToRoute(AppRoute.Unknown))
+      dispatch(redirectToRoute(AppRoute.Unknown));
     } finally {
       dispatch(setDataLoadedStatus(false));
     }
   }
 );
 
-export const sendFilmCommentAction = createAsyncThunk<void, { id:number, comment: string, rating: number }, {
+export const sendFilmCommentAction = createAsyncThunk<void, { id: number, comment: string, rating: number }, {
   dispatch: AppDispatch,
   state: State,
   extra: AxiosInstance
@@ -134,10 +182,12 @@ export const loginAction = createAsyncThunk<void, AuthData, {
   'USER_LOGIN',
   async ({login: email, password}, {dispatch, extra: api}) => {
     const {data: user} = await api.post<UserData>(APIRoute.Login, {email, password});
-    if(!user) return;
+    if (!user) {return;}
     saveUser(user);
     dispatch(requireAuthorization(AuthorizationStatus.Auth));
-    dispatch(redirectToRoute(AppRoute.Main))
+    const {data: favorites} = await api.get<TFilm[]>(APIRoute.Favorites);
+    dispatch(loadFavorites(favorites));
+    dispatch(redirectToRoute(AppRoute.Main));
   }
 );
 
@@ -150,6 +200,7 @@ export const logoutAction = createAsyncThunk<void, undefined, {
   async (_arg, {dispatch, extra: api}) => {
     await api.delete(APIRoute.Logout);
     dropUser();
+    dispatch(loadFavorites([]));
     dispatch(requireAuthorization(AuthorizationStatus.NoAuth));
   },
 );

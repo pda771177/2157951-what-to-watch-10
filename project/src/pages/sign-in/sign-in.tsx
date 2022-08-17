@@ -4,6 +4,7 @@ import {FormEvent, useRef} from 'react';
 import {useAppDispatch} from '../../hooks';
 import {AuthData} from '../../types/auth-data';
 import {loginAction} from '../../store/api-actions';
+import {MINIMAL_PASSWORD_LENGTH} from '../../consts';
 
 function SignIn(): JSX.Element {
 
@@ -13,6 +14,10 @@ function SignIn(): JSX.Element {
   const dispatch = useAppDispatch();
 
   const onSubmit = (authData: AuthData) => {
+    if (authData.password.length < MINIMAL_PASSWORD_LENGTH) {
+      //alert("Password too weak. Minimal length is " + MINIMAL_PASSWORD_LENGTH.toString());
+      return;
+    }
     dispatch(loginAction(authData));
   };
 

@@ -1,30 +1,45 @@
 import {useParams, useNavigate} from 'react-router-dom';
 import {TFilm} from '../../types/types';
 import {useAppSelector} from '../../hooks';
+import {store} from '../../store';
+import {loadFilmAction} from '../../store/api-actions';
+import LoadingScreen from '../loading/loading';
+import React from 'react';
+import {AppRoute} from '../../consts';
 
-type PlayerProps = {
-  film?: TFilm
-};
-
-function Player({film}: PlayerProps): JSX.Element {
+function Player(): JSX.Element {
   const {id} = useParams();
-  const allFilms = useAppSelector((state) => state.allFilmsList);
-  const [filmFromParams] = allFilms.filter((item) => item.id.toString() === id?.replace(':', ''));
-  const filmToPlay = film ? film : filmFromParams;
-  const getTimeFromMins = (mins: number): string => `${(Math.trunc(mins / 60))}:${(mins % 60)}:00`;
   const navigate = useNavigate();
+  const {allFilmsList, selectedFilm} = useAppSelector((state) => state);
+
+  const unknownFilm = !id ? false : !allFilmsList.map((film: TFilm) => film.id.toString()).includes(id.toString());
+
+  if(unknownFilm) {
+    navigate(AppRoute.Unknown);
+  }
+
+  if (id && (!selectedFilm || selectedFilm.id.toString() !== id)) {
+    store.dispatch(loadFilmAction(id));
+    return (
+      <LoadingScreen/>
+    );
+  }
+
+  const filmToPlay: TFilm = selectedFilm ? selectedFilm : allFilmsList.filter((film: TFilm) => id === film.id.toString())[0];
+
+  const getTimeFromMins = (mins: number): string => `${(Math.trunc(mins / 60))}:${(mins % 60)}:00`;
   return (
     <div className="player">
       <div className="visually-hidden">{id}</div>
       <video src={filmToPlay.videoLink} className="player__video" poster={filmToPlay.previewImage}></video>
 
-      <button type="button" className="player__exit" onClick={()=>navigate('/')}>Exit</button>
+      <button type="button" className="player__exit" onClick={() => navigate('/')}>Exit</button>
 
       <div className="player__controls">
         <div className="player__controls-row">
           <div className="player__time">
             <progress className="player__progress" value="30" max="100"></progress>
-            <div className="player__toggler" style={{left: '30%'}}>Toggler</div>
+            <div className="player__toggler" style={{left: '0%'}}>Toggler</div>
           </div>
           <div className="player__time-value">{getTimeFromMins(filmToPlay.runTime)}</div>
         </div>

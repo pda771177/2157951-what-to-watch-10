@@ -2,15 +2,12 @@ import Logo from '../../components/logo/logo';
 import UserBlock from '../../components/user-block/user-block';
 import Breadcrumbs from '../../components/breadcrumbs/breadcrumbs';
 import {useParams} from 'react-router-dom';
-import {TFilm} from '../../types/types';
 import React from 'react';
 import ReviewForm from '../../components/review-form/review-form';
-import {useAppSelector} from "../../hooks";
-import {store} from "../../store";
-import {loadFilmAction} from "../../store/api-actions";
-import LoadingScreen from "../loading/loading";
-
-
+import {useAppSelector} from '../../hooks';
+import {store} from '../../store';
+import {loadFilmAction} from '../../store/api-actions';
+import LoadingScreen from '../loading/loading';
 
 function AddReview(): JSX.Element {
   const {id} = useParams();

@@ -16,7 +16,7 @@ function GenreSelector(): JSX.Element {
   genres.forEach((genreStr: string) => {
     try {
       result.push(
-        <li onClick={() => dispatch(changeGenre(genreStr))} className={getSelectedClass(genreStr, genre)}>
+        <li onClick={() => dispatch(changeGenre(genreStr))} className={getSelectedClass(genreStr, genre)} key={genreStr}>
           <a href="#" className="catalog__genres-link">{genreStr}</a>
         </li>
       );
@@ -28,7 +28,7 @@ function GenreSelector(): JSX.Element {
   return (
     <React.Fragment>
       <ul className="catalog__genres-list">
-        <li onClick={() => dispatch(changeGenre('All genres'))} className={getSelectedClass('All genres', genre)}>
+        <li onClick={() => dispatch(changeGenre('All genres'))} className={getSelectedClass('All genres', genre)} key={'All genres'}>
           <a href="#" className="catalog__genres-link">All genres</a>
         </li>
         {result}

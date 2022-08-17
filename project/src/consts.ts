@@ -4,6 +4,8 @@ export enum AuthorizationStatus {
   Unknown = 'UNKNOWN'
 }
 
+export const MINIMAL_PASSWORD_LENGTH = 1;
+
 export enum APIRoute {
   PromoFilm = '/promo',
   Films = '/films',
@@ -11,6 +13,8 @@ export enum APIRoute {
   SimilarFilms = '/films/:id/similar',
   FilmComments = '/comments/:id',
   SendComment = '/comments/:id',
+  Favorites = '/favorite',
+  ChangeFavorite = '/favorite/:id/:status',
   Login = '/login',
   Logout = '/logout'
 }

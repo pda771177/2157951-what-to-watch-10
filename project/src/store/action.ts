@@ -8,6 +8,8 @@ export const loadSimilarFilms = createAction('LOAD_SIMILAR_FILMS', (films: TFilm
 export const loadFilmComments = createAction('LOAD_FILM_COMMENTS', (comments: TComment[]) => ({payload: comments}));
 export const sendFilmComment = createAction<{ comment: string, rating: number }>('SEND_FILM_COMMENT');
 export const loadFilms = createAction('LOAD_FILMS', (films: TFilm[]) => ({payload: films}));
+export const loadFavorites = createAction('LOAD_FAVORITES', (films: TFilm[]) => ({payload: films}));
+export const changeFavorite = createAction<{ filmId: string, favorite: boolean }>('CHANGE_FAVORITE');
 export const loadPromo = createAction('LOAD_PROMO', (film: TFilm) => ({payload: film}));
 export const changeGenre = createAction('CHANGE_GENRE', (genre: string) => ({payload: genre}));
 export const selectFilmsByGenre = createAction('SELECT_FILMS_BY_GENRE', (films: TFilm[]) => ({payload: films}));

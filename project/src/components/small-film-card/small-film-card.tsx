@@ -11,7 +11,7 @@ type SmallFilmCardProps = {
   imgHeight?: string
 };
 
-function SmallFilmCard({film, play, onMouseOver, imgWidth = '280', imgHeight = '175'}: SmallFilmCardProps): JSX.Element {
+function SmallFilmCard({film, play, onMouseOver, imgWidth, imgHeight}: SmallFilmCardProps): JSX.Element {
   const {previewImage, name, id} = film;
   const [haveFocus, setHaveFocus] = useState(false);
 
@@ -33,4 +33,4 @@ function SmallFilmCard({film, play, onMouseOver, imgWidth = '280', imgHeight = '
 
 SmallFilmCard.defaultProps = {imgWidth: '280', imgHeight: '175'};
 
-export default SmallFilmCard;
+export default React.memo(SmallFilmCard, (prevProps, nextProps) => prevProps.film === nextProps.film && prevProps.play === nextProps.play && prevProps.imgWidth === nextProps.imgWidth && prevProps.imgHeight === nextProps.imgHeight);

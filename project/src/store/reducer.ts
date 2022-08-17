@@ -7,7 +7,7 @@ import {
   selectFilmsByGenre,
   setError,
   setDataLoadedStatus,
-  loadFilm, loadSimilarFilms, loadFilmComments,
+  loadFilm, loadSimilarFilms, loadFilmComments, loadFavorites,
 } from './action';
 import {TComment, TFilm} from '../types/types';
 import {AuthorizationStatus} from '../consts';
@@ -22,7 +22,8 @@ type TState = {
   isDataLoaded: boolean,
   selectedFilm: TFilm | null,
   similarFilms: TFilm[] | [],
-  filmComments: TComment[] | []
+  filmComments: TComment[] | [],
+  favorites: TFilm[] | []
 };
 
 const initialState: TState = {
@@ -35,7 +36,8 @@ const initialState: TState = {
   isDataLoaded: false,
   selectedFilm: null,
   similarFilms: [],
-  filmComments: []
+  filmComments: [],
+  favorites: []
 };
 
 function filterByGenre(filmsList: TFilm[], genre: string): TFilm[] {
@@ -60,6 +62,9 @@ const reducer = createReducer(initialState, (builder) => {
     })
     .addCase(loadPromo, (state, action) => {
       state.promoFilm = action.payload;
+    })
+    .addCase(loadFavorites, (state, action) => {
+      state.favorites = action.payload;
     })
     .addCase(changeGenre, (state, action) => {
       state.genre = action.payload;

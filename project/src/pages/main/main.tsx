@@ -1,5 +1,4 @@
 import React from 'react';
-import { TFilm } from '../../types/types';
 import FilmCard from '../../components/film-card/film-card';
 import Logo from '../../components/logo/logo';
 import Copyright from '../../components/copyright/copyright';
