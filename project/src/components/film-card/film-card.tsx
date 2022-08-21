@@ -9,7 +9,8 @@ import React from 'react';
 type FilmCardProps = { film?: TFilm | null | undefined, imgPosterWidth?: string, imgPosterHeight?: string };
 
 function FilmCard({film, imgPosterWidth = '0', imgPosterHeight = '0'}: FilmCardProps): JSX.Element {
-  const {authorizationStatus} = useAppSelector((state) => state);
+  const {authorizationStatus} = useAppSelector((state) => state.USER);
+
 
   if(!film) {
     return (
@@ -39,7 +40,7 @@ function FilmCard({film, imgPosterWidth = '0', imgPosterHeight = '0'}: FilmCardP
           <div className="film-card__poster">
             <img src={posterImage} alt={`${name} poster`} width={imgPosterWidth} height={imgPosterHeight}/>
           </div>
-          <FilmCardDescription film={film} review={authorizationStatus === AuthorizationStatus.Auth}/>
+          <FilmCardDescription film={film} review={false}/>
         </div>
       </div>
     </section>

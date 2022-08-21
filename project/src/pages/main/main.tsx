@@ -6,7 +6,7 @@ import GenreSelector from '../../components/genre-selector/genre-selector';
 import {useAppSelector} from '../../hooks';
 
 function Main(): JSX.Element {
-  const {promoFilm} = useAppSelector((state) => state);
+  const {promoFilm} = useAppSelector((state) => state.FILMS);
   return (
     <React.Fragment>
       <FilmCard film={promoFilm}/>

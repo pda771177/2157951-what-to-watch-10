@@ -8,18 +8,20 @@ import {useParams} from 'react-router-dom';
 import FilmNavigation from '../../components/film-nav/film-nav';
 import {useAppSelector} from '../../hooks';
 import {store} from '../../store';
-import {loadFilmAction} from '../../store/api-actions';
+import {loadFilmAction, loadFilmCommentsAction} from '../../store/api-actions';
 import LoadingScreen from '../loading/loading';
 import {AuthorizationStatus} from '../../consts';
 
 function Film(): JSX.Element {
   const {id} = useParams();
   const filmId = id ? id.replace(':', '') : '';
-  const {selectedFilm, similarFilms, filmComments, authorizationStatus} = useAppSelector((state) => state);
+  const {selectedFilm, similarFilms, filmComments} = useAppSelector((state) => state.FILMS);
+  const {authorizationStatus} = useAppSelector((state) => state.USER);
   const isDataReady = selectedFilm && selectedFilm.id.toString() === filmId;
   useEffect(() => {
     if (!isDataReady) {
       store.dispatch(loadFilmAction(filmId));
+      store.dispatch(loadFilmCommentsAction(filmId));
     }
   }, [selectedFilm]);
   if (!isDataReady) {

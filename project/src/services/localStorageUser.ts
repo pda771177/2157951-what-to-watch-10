@@ -12,9 +12,9 @@ export const saveUser = (user: UserData): void => {
 
 export const getUser = (): UserData => {
   try {
-    return JSON.parse(localStorage.getItem(AUTH_USER_KEY_NAME) as string);
+    return JSON.parse(localStorage.getItem(AUTH_USER_KEY_NAME) as string) as UserData;
   }catch (e) {
-    return {token: ''} as UserData;
+    return {token: '', avatarUrl: ''} as UserData;
   }
 };
 

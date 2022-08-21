@@ -11,7 +11,7 @@ type FilmCardDescriptionProps = {
 
 function FilmCardDescription({film, review}: FilmCardDescriptionProps): JSX.Element {
   const {id, name, genre, released} = film;
-  const {authorizationStatus} = useAppSelector((state) => state);
+  const {authorizationStatus} = useAppSelector((state) => state.USER);
   const navigate = useNavigate();
 
   const reviewClassName = review === true ? 'btn film-card__button' : 'btn film-card__button visually-hidden';

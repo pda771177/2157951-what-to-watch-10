@@ -11,7 +11,7 @@ import LoadingScreen from '../loading/loading';
 
 function AddReview(): JSX.Element {
   const {id} = useParams();
-  const {selectedFilm} = useAppSelector((state) => state);
+  const {selectedFilm} = useAppSelector((state) => state.FILMS);
   const filmId = id ? id.replace(':', '') : '';
 
   if (!selectedFilm || selectedFilm.id.toString() !== filmId) {

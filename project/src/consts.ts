@@ -29,4 +29,10 @@ export enum AppRoute {
   Unknown = '/404'
 }
 
+export enum NameSpace {
+  Films = 'FILMS',
+  Comments = 'COMMENTS',
+  User = 'USER',
+}
+
 export const TIMEOUT_SHOW_ERROR = 2000;

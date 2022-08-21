@@ -2,15 +2,16 @@ import {useParams, useNavigate} from 'react-router-dom';
 import {TFilm} from '../../types/types';
 import {useAppSelector} from '../../hooks';
 import {store} from '../../store';
-import {loadFilmAction} from '../../store/api-actions';
+
 import LoadingScreen from '../loading/loading';
 import React from 'react';
 import {AppRoute} from '../../consts';
+import {loadFilmAction} from '../../store/api-actions';
 
 function Player(): JSX.Element {
   const {id} = useParams();
   const navigate = useNavigate();
-  const {allFilmsList, selectedFilm} = useAppSelector((state) => state);
+  const {allFilmsList, selectedFilm} = useAppSelector((state) => state.FILMS);
 
   const unknownFilm = !id ? false : !allFilmsList.map((film: TFilm) => film.id.toString()).includes(id.toString());
 

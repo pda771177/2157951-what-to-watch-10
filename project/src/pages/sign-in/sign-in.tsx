@@ -1,17 +1,23 @@
 import Logo from '../../components/logo/logo';
 import Copyright from '../../components/copyright/copyright';
 import {FormEvent, useRef} from 'react';
-import {useAppDispatch} from '../../hooks';
+import {useAppDispatch, useAppSelector} from '../../hooks';
 import {AuthData} from '../../types/auth-data';
-import {loginAction} from '../../store/api-actions';
-import {MINIMAL_PASSWORD_LENGTH} from '../../consts';
+import {loadFavoritesAction, loginAction} from '../../store/api-actions';
+import {AppRoute, AuthorizationStatus, MINIMAL_PASSWORD_LENGTH} from '../../consts';
+import {useNavigate} from 'react-router-dom';
 
 function SignIn(): JSX.Element {
-
   const loginRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
 
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const {authorizationStatus} = useAppSelector((state) => state.USER);
+
+  if (authorizationStatus === AuthorizationStatus.Auth) {
+    navigate(AppRoute.Main);
+  }
 
   const onSubmit = (authData: AuthData) => {
     if (authData.password.length < MINIMAL_PASSWORD_LENGTH) {
@@ -19,6 +25,10 @@ function SignIn(): JSX.Element {
       return;
     }
     dispatch(loginAction(authData));
+    if (authorizationStatus === AuthorizationStatus.Auth){
+      dispatch(loadFavoritesAction());
+      navigate(AppRoute.Main);
+    }
   };
 
   const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
