@@ -4,7 +4,6 @@ import Main from '../../pages/main/main';
 import Film from '../../pages/film/film';
 import Player from '../../pages/player/player';
 import AddReview from '../../pages/add-review/add-review';
-import SignIn from '../../pages/sign-in/sign-in';
 import PrivateRoute from '../private-route/private-route';
 import {AppRoute} from '../../consts';
 import MyList from '../../pages/my-list/my-list';
@@ -13,23 +12,24 @@ import {useAppSelector} from '../../hooks';
 import Loading from '../../pages/loading/loading';
 import HistoryRouter from '../history-router/history-router';
 import browserHistory from '../../browser-history';
+import SignIn from '../../pages/sign-in/sign-in';
 
 function App(): JSX.Element {
-  const {isDataLoaded, allFilmsList, authorizationStatus} = useAppSelector((state) => state);
+  const {authorizationStatus} = useAppSelector((state) => state.USER);
+  const {isDataLoaded, allFilmsList} = useAppSelector((state) => state.FILMS);
 
   if (isDataLoaded) {
     return (
       <Loading/>
     );
   }
-
   return (
     <HistoryRouter history={browserHistory}>
       <Routes>
-        <Route path='/'>
+        <Route path={AppRoute.Main}>
           <Route index element={<Main/>}/>
           <Route path={AppRoute.SignIn} element={<SignIn/>}/>
-          <Route path={AppRoute.MyList} element={<PrivateRoute authorizationStatus={authorizationStatus}><MyList films={allFilmsList.slice(0, 9)}/></PrivateRoute>}/>
+          <Route path={AppRoute.MyList} element={<PrivateRoute authorizationStatus={authorizationStatus}><MyList/></PrivateRoute>}/>
           <Route path={AppRoute.Film} element={<Film/>}/>
           <Route path={AppRoute.AddReview} element={<AddReview/>}/>
           <Route path={AppRoute.Player} element={<Player/>}/>

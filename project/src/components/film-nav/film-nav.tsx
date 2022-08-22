@@ -9,8 +9,6 @@ type FilmNavigationProps = {
   comments: TComment[]
 };
 
-const generateKey = (prefix?: string): string => Math.random().toString(36).replace('0.', prefix ?? '');
-
 function FilmNavigation({film, comments}: FilmNavigationProps): JSX.Element {
   const [selectedTab, setSelectedTab] = React.useState('Overview');
   const tabs: string[] = ['Overview', 'Details', 'Reviews'];
@@ -24,7 +22,7 @@ function FilmNavigation({film, comments}: FilmNavigationProps): JSX.Element {
   const result: JSX.Element[] = tabs.map((tab) => {
     const className = tab === selectedTab ? 'film-nav__item film-nav__item--active' : 'film-nav__item';
     return (
-      <li key={generateKey(tab)} className={className}>
+      <li key={tab} className={className}>
         <div onClick={()=>setSelectedTab(tab)} className="film-nav__link">{tab}</div>
       </li>
     );

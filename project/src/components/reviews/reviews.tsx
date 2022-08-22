@@ -1,5 +1,5 @@
 import React from 'react';
-import {TComment, TFilm} from '../../types/types';
+import {TComment} from '../../types/types';
 import Review from '../review/review';
 
 type ReviewsProps = {
@@ -7,17 +7,18 @@ type ReviewsProps = {
 };
 
 function Reviews({comments}: ReviewsProps): JSX.Element {
+  if (!comments.length) {
+    return (
+      <p className="film-card__details-name">There are no comments yet</p>
+    );
+  }
 
-  if(!comments.length) return (
-    <p className="film-card__details-name">There are no comments yet</p>
-  )
+  const middle = Math.floor(comments.length / 2);
+  const leftComments = comments.slice(0, middle);
+  const rightComments = comments.slice(middle, comments.length);
 
-  const middle = Math.floor(comments.length/2);
-  const leftComments = comments.slice(0,middle);
-  const rightComments = comments.slice(middle,comments.length);
-
-  const leftColumn = leftComments.map(comment => (<Review review={comment}/>))
-  const rightColumn = rightComments.map(comment => (<Review review={comment}/>))
+  const leftColumn = leftComments.map((comment) => (<Review key={comment.id} review={comment}/>));
+  const rightColumn = rightComments.map((comment) => (<Review key={comment.id} review={comment}/>));
 
 
   return (

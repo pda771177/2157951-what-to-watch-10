@@ -6,7 +6,7 @@ import {logoutAction} from '../../store/api-actions';
 import {getUser} from '../../services/localStorageUser';
 
 function UserBlock(): JSX.Element {
-  const {authorizationStatus} = useAppSelector((state) => state);
+  const {authorizationStatus} = useAppSelector((state) => state.USER);
   const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
@@ -16,21 +16,32 @@ function UserBlock(): JSX.Element {
     dispatch(logoutAction());
   };
 
+  const onSignInClick = () => {
+    navigate(AppRoute.SignIn);
+  };
+
+  let avatarUrl: string | null;
+  try {
+    avatarUrl = getUser().avatarUrl;
+  }catch (e) {
+    avatarUrl = null;
+  }
+
   return (
     <ul className="user-block">
-      {authorizationStatus === AuthorizationStatus.Auth ? (
+      {authorizationStatus !== AuthorizationStatus.Auth || !avatarUrl ? (
+        <a onClick={onSignInClick} className="user-block__link">Sign in</a>
+      ) : (
         <React.Fragment>
           <li className="user-block__item">
             <div className="user-block__avatar">
-              <img src={getUser().avatarUrl} alt="User avatar" width="63" height="63"/>
+              <img src={avatarUrl} alt="User avatar" width="63" height="63"/>
             </div>
           </li>
           <li className="user-block__item">
             <a onClick={onLogoutClick} className="user-block__link">Sign out</a>
           </li>
         </React.Fragment>
-      ) : (
-        <a onClick={() => {navigate(AppRoute.SignIn);}} className="user-block__link">Sign in</a>
       )}
     </ul>
   );

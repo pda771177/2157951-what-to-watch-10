@@ -11,14 +11,12 @@ function SmallFilmsList({films}: SmallFilmsListProps): JSX.Element {
   const result: JSX.Element[] = [];
   const [hoveredFilm, setHoveredFilm] = React.useState<TFilm>();
 
-  const generateKey = (prefix?: string): string => Math.random().toString(36).replace('0.', prefix ?? '');
-
   films.forEach((film: TFilm) => {
     try {
       if (hoveredFilm?.id === film.id) {
-        result.push(<SmallFilmCard play onMouseOver={() => setHoveredFilm(film)} film={film} key={generateKey(film.name)}/>);
+        result.push(<SmallFilmCard play onMouseOver={() => setHoveredFilm(film)} film={film} key={film.id}/>);
       } else {
-        result.push(<SmallFilmCard onMouseOver={() => setHoveredFilm(film)} film={film} key={generateKey(film.name)}/>);
+        result.push(<SmallFilmCard onMouseOver={() => setHoveredFilm(film)} film={film} key={film.id}/>);
       }
     } catch (error) {
       out.push({...film, error});

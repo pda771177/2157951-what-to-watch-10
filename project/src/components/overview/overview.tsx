@@ -7,7 +7,6 @@ type OverviewProps = {
 };
 
 function Overview({film}: OverviewProps): JSX.Element {
-
   return (
     <React.Fragment>
       <FilmRating ratingScore={film.rating} voted={film.scoresCount}/>

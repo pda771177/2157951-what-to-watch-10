@@ -1,16 +1,14 @@
 import React, {SyntheticEvent} from 'react';
 import StarRating from '../star-rating/star-rating';
 import {TFilm} from '../../types/types';
-import {useAppDispatch} from "../../hooks";
-import {store} from "../../store";
-import {sendFilmCommentAction} from "../../store/api-actions";
+import {store} from '../../store';
+import {sendFilmCommentAction} from '../../store/api-actions';
 
 type ReviewFormProps = {
   film: TFilm
 };
 
 function ReviewForm({film}: ReviewFormProps): JSX.Element {
-  const dispatch = useAppDispatch();
   const [comment, setComment] = React.useState('');
   const [rating, setRating] = React.useState(0);
 
@@ -23,8 +21,8 @@ function ReviewForm({film}: ReviewFormProps): JSX.Element {
   const onSubmitListener = function (ev: SyntheticEvent) {
     ev.preventDefault();
     const body = {comment, rating, id: film.id};
-    store.dispatch(sendFilmCommentAction(body))
-  }
+    store.dispatch(sendFilmCommentAction(body));
+  };
 
   return (
     <div className="add-review">

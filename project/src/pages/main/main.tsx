@@ -1,5 +1,4 @@
 import React from 'react';
-import { TFilm } from '../../types/types';
 import FilmCard from '../../components/film-card/film-card';
 import Logo from '../../components/logo/logo';
 import Copyright from '../../components/copyright/copyright';
@@ -7,7 +6,7 @@ import GenreSelector from '../../components/genre-selector/genre-selector';
 import {useAppSelector} from '../../hooks';
 
 function Main(): JSX.Element {
-  const {promoFilm} = useAppSelector((state) => state);
+  const {promoFilm} = useAppSelector((state) => state.FILMS);
   return (
     <React.Fragment>
       <FilmCard film={promoFilm}/>
