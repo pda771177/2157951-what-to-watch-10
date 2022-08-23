@@ -1,7 +1,6 @@
 import {TFilm} from '../../types/types';
 import {useNavigate} from 'react-router-dom';
-import {AppRoute, AuthorizationStatus} from '../../consts';
-import {useAppSelector} from '../../hooks';
+import {AppRoute} from '../../consts';
 import MyListButton from '../my-list-button/my-list-button';
 
 type FilmCardDescriptionProps = {
@@ -11,17 +10,12 @@ type FilmCardDescriptionProps = {
 
 function FilmCardDescription({film, review}: FilmCardDescriptionProps): JSX.Element {
   const {id, name, genre, released} = film;
-  const {authorizationStatus} = useAppSelector((state) => state.USER);
   const navigate = useNavigate();
 
   const reviewClassName = review === true ? 'btn film-card__button' : 'btn film-card__button visually-hidden';
 
   const onPlayClick = () => {
-    if (authorizationStatus === AuthorizationStatus.Auth) {
-      navigate(AppRoute.Player.replace(':id', film.id.toString()));
-    } else {
-      navigate(AppRoute.SignIn);
-    }
+    navigate(AppRoute.Player.replace(':id', film.id.toString()));
   };
 
   const onAddReviewClick = () => {
@@ -44,7 +38,7 @@ function FilmCardDescription({film, review}: FilmCardDescriptionProps): JSX.Elem
           </svg>
           <span>Play</span>
         </button>
-        <MyListButton promo={film}/>
+        <MyListButton film={film}/>
         <a onClick={onAddReviewClick} className={reviewClassName}>Add review</a>
       </div>
     </div>

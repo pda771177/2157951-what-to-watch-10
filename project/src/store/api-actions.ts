@@ -52,6 +52,20 @@ export const loadFilmAction = createAsyncThunk<TFilm, string, {
   'LOAD_FILM',
   async (filmId, {dispatch, extra: api}) => {
     const {data} = await api.get<TFilm>(APIRoute.Film.replace(':id', filmId));
+    dispatch(loadFilmCommentsAction(filmId));
+    dispatch(loadSimilarFilmsAction(filmId));
+    return data;
+  }
+);
+
+export const loadSimilarFilmsAction = createAsyncThunk<TFilm[], string, {
+  dispatch: AppDispatch,
+  state: State,
+  extra: AxiosInstance
+}>(
+  'LOAD_SIMILAR_FILMS',
+  async (filmId, {dispatch, extra: api}) => {
+    const {data} = await api.get<TFilm[]>(APIRoute.SimilarFilms.replace(':id', filmId));
     return data;
   }
 );
@@ -115,6 +129,7 @@ export const loginAction = createAsyncThunk<void, AuthData, {
     if (!user) {
       return;
     }
+    dispatch(loadFavoritesAction());
     saveUser(user);
   }
 );
@@ -127,6 +142,7 @@ export const logoutAction = createAsyncThunk<void, undefined, {
   'USER_LOGOUT',
   async (_arg, {dispatch, extra: api}) => {
     await api.delete(APIRoute.Logout);
+    dispatch(loadFavoritesAction());
     dropUser();
   },
 );

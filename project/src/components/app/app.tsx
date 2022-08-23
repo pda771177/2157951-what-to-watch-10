@@ -13,12 +13,14 @@ import Loading from '../../pages/loading/loading';
 import HistoryRouter from '../history-router/history-router';
 import browserHistory from '../../browser-history';
 import SignIn from '../../pages/sign-in/sign-in';
+import {getAllFilms, getLoadingStatus} from '../../store/films-process/selectors';
+import SignInRoute from '../sign-in-route/sign-in-route';
 
 function App(): JSX.Element {
-  const {authorizationStatus} = useAppSelector((state) => state.USER);
-  const {isDataLoaded, allFilmsList} = useAppSelector((state) => state.FILMS);
+  const isDataLoading = useAppSelector(getLoadingStatus);
+  const films = useAppSelector(getAllFilms);
 
-  if (isDataLoaded) {
+  if (isDataLoading) {
     return (
       <Loading/>
     );
@@ -28,13 +30,13 @@ function App(): JSX.Element {
       <Routes>
         <Route path={AppRoute.Main}>
           <Route index element={<Main/>}/>
-          <Route path={AppRoute.SignIn} element={<SignIn/>}/>
-          <Route path={AppRoute.MyList} element={<PrivateRoute authorizationStatus={authorizationStatus}><MyList/></PrivateRoute>}/>
+          <Route path={AppRoute.SignIn} element={<SignInRoute><SignIn/></SignInRoute>}/>
+          <Route path={AppRoute.MyList} element={<PrivateRoute><MyList/></PrivateRoute>}/>
           <Route path={AppRoute.Film} element={<Film/>}/>
-          <Route path={AppRoute.AddReview} element={<AddReview/>}/>
-          <Route path={AppRoute.Player} element={<Player/>}/>
+          <Route path={AppRoute.AddReview} element={<PrivateRoute><AddReview/></PrivateRoute>}/>
+          <Route path={AppRoute.Player} element={<PrivateRoute><Player/></PrivateRoute>}/>
         </Route>
-        <Route path='*' element={<NotFound404 films={allFilmsList.slice(0, 4)}/>}/>
+        <Route path='*' element={<NotFound404 films={films.slice(0, 4)}/>}/>
       </Routes>
     </HistoryRouter>
   );
