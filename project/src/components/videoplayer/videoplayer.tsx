@@ -3,8 +3,8 @@ import {TFilm} from '../../types/types';
 
 type VideoplayerProps = {
   film: TFilm,
-  width: number,
-  height: number,
+  width?: number,
+  height?: number,
   autoPlay: boolean,
   mute: boolean,
   delay?: number

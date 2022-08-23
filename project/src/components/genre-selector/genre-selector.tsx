@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import SmallFilmListSizer from '../small-film-list-sizer/small-film-list-sizer';
 import {TFilm} from '../../types/types';
+import {getAllFilms} from '../../store/films-process/selectors';
 
 function filterByGenre(filmsList: TFilm[], genre: string): TFilm[] {
   const resultFilms = filmsList.filter((film) => film.genre === genre);
@@ -9,8 +10,8 @@ function filterByGenre(filmsList: TFilm[], genre: string): TFilm[] {
 }
 
 function GenreSelector(): JSX.Element {
-  const [genre, changeGenre] = useState('All genres')
-  const {allFilmsList} = useAppSelector((state) => state.FILMS);
+  const [genre, changeGenre] = useState('All genres');
+  const allFilmsList = useAppSelector(getAllFilms);
   const genres: Set<string> = new Set(allFilmsList.map((film) => film.genre));
   const out = [];
   const result: JSX.Element[] = [];

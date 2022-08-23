@@ -8,23 +8,34 @@ import {useParams} from 'react-router-dom';
 import FilmNavigation from '../../components/film-nav/film-nav';
 import {useAppSelector} from '../../hooks';
 import {store} from '../../store';
-import {loadFilmAction, loadFilmCommentsAction} from '../../store/api-actions';
+import {loadFilmAction} from '../../store/api-actions';
 import LoadingScreen from '../loading/loading';
-import {AuthorizationStatus} from '../../consts';
+import {checkUserAuthorization} from '../../store/user-process/selectors';
+import {
+  getFilmComments,
+  getLoadingStatus,
+  getSelectedFilm,
+  getSimilarFilms
+} from '../../store/films-process/selectors';
 
 function Film(): JSX.Element {
   const {id} = useParams();
   const filmId = id ? id.replace(':', '') : '';
-  const {selectedFilm, similarFilms, filmComments} = useAppSelector((state) => state.FILMS);
-  const {authorizationStatus} = useAppSelector((state) => state.USER);
-  const isDataReady = selectedFilm && selectedFilm.id.toString() === filmId;
+  const selectedFilm = useAppSelector(getSelectedFilm);
+  const similarFilms = useAppSelector(getSimilarFilms);
+  const filmComments = useAppSelector(getFilmComments);
+  const isLoading = useAppSelector(getLoadingStatus);
+  const isAutorized = useAppSelector(checkUserAuthorization);
+
+  const isDataReady: boolean = !isLoading && selectedFilm?.id.toString() === filmId;
+
   useEffect(() => {
     if (!isDataReady) {
       store.dispatch(loadFilmAction(filmId));
-      store.dispatch(loadFilmCommentsAction(filmId));
     }
   }, [selectedFilm]);
-  if (!isDataReady) {
+
+  if (!isDataReady || !selectedFilm) {
     return (
       <LoadingScreen/>
     );
@@ -47,7 +58,7 @@ function Film(): JSX.Element {
             </header>
 
             <div className="film-card__wrap">
-              <FilmCardDescription film={selectedFilm} review={authorizationStatus === AuthorizationStatus.Auth}/>
+              <FilmCardDescription film={selectedFilm} review={isAutorized}/>
             </div>
           </div>
 

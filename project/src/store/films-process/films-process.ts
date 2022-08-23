@@ -6,7 +6,7 @@ import {
   loadFilmAction,
   loadFilmCommentsAction,
   loadFilmsAction,
-  loadPromoFilmAction,
+  loadPromoFilmAction, loadSimilarFilmsAction,
   sendFilmCommentAction
 } from '../api-actions';
 import {NameSpace} from '../../consts';
@@ -18,6 +18,7 @@ const initialState: TFilmProcess = {
   promoFilm: null,
   error: null,
   isDataLoaded: false,
+
   selectedFilm: null,
   similarFilms: [],
   filmComments: [],
@@ -60,6 +61,17 @@ export const filmsProcess = createSlice({
       })
       .addCase(loadFavoritesAction.rejected, (state, {payload}) => {
         state.favorites = [];
+        state.isDataLoaded = false;
+      })
+      .addCase(loadSimilarFilmsAction.pending, (state) => {
+        state.isDataLoaded = true;
+      })
+      .addCase(loadSimilarFilmsAction.fulfilled, (state, {payload}) => {
+        state.similarFilms = payload;
+        state.isDataLoaded = false;
+      })
+      .addCase(loadSimilarFilmsAction.rejected, (state, {payload}) => {
+        state.similarFilms = [];
         state.isDataLoaded = false;
       })
       .addCase(changeFavoriteAction.pending, (state) => {

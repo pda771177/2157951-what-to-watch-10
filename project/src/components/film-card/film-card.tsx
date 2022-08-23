@@ -2,16 +2,11 @@ import UserBlock from '../user-block/user-block';
 import {TFilm} from '../../types/types';
 import Logo from '../logo/logo';
 import FilmCardDescription from '../film-card-description/film-card-description';
-import {useAppSelector} from '../../hooks';
-import {AuthorizationStatus} from '../../consts';
 import React from 'react';
 
 type FilmCardProps = { film?: TFilm | null | undefined, imgPosterWidth?: string, imgPosterHeight?: string };
 
 function FilmCard({film, imgPosterWidth = '0', imgPosterHeight = '0'}: FilmCardProps): JSX.Element {
-  const {authorizationStatus} = useAppSelector((state) => state.USER);
-
-
   if(!film) {
     return (
       <header className="page-header film-card__head">

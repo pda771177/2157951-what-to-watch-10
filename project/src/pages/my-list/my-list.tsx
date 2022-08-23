@@ -3,10 +3,10 @@ import UserBlock from '../../components/user-block/user-block';
 import SmallFilmsList from '../../components/small-films-list/small-films-list';
 import Copyright from '../../components/copyright/copyright';
 import {useAppSelector} from '../../hooks';
-import {store} from "../../store";
+import {getFavorites} from '../../store/films-process/selectors';
 
 function MyList(): JSX.Element {
-  const {favorites} = useAppSelector((state) => state.FILMS);
+  const favorites = useAppSelector(getFavorites);
 
   return (
     <div className="user-page">

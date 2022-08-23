@@ -4,8 +4,9 @@ import {FormEvent, useRef} from 'react';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {AuthData} from '../../types/auth-data';
 import {loadFavoritesAction, loginAction} from '../../store/api-actions';
-import {AppRoute, AuthorizationStatus, MINIMAL_PASSWORD_LENGTH} from '../../consts';
+import {AppRoute, MINIMAL_PASSWORD_LENGTH} from '../../consts';
 import {useNavigate} from 'react-router-dom';
+import {checkUserAuthorization} from '../../store/user-process/selectors';
 
 function SignIn(): JSX.Element {
   const loginRef = useRef<HTMLInputElement | null>(null);
@@ -13,9 +14,9 @@ function SignIn(): JSX.Element {
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const {authorizationStatus} = useAppSelector((state) => state.USER);
+  const isAuthorized = useAppSelector(checkUserAuthorization);
 
-  if (authorizationStatus === AuthorizationStatus.Auth) {
+  if (isAuthorized) {
     navigate(AppRoute.Main);
   }
 
@@ -25,7 +26,7 @@ function SignIn(): JSX.Element {
       return;
     }
     dispatch(loginAction(authData));
-    if (authorizationStatus === AuthorizationStatus.Auth){
+    if (isAuthorized){
       dispatch(loadFavoritesAction());
       navigate(AppRoute.Main);
     }

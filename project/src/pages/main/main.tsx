@@ -4,9 +4,10 @@ import Logo from '../../components/logo/logo';
 import Copyright from '../../components/copyright/copyright';
 import GenreSelector from '../../components/genre-selector/genre-selector';
 import {useAppSelector} from '../../hooks';
+import {getPromoFilm} from '../../store/films-process/selectors';
 
 function Main(): JSX.Element {
-  const {promoFilm} = useAppSelector((state) => state.FILMS);
+  const promoFilm = useAppSelector(getPromoFilm);
   return (
     <React.Fragment>
       <FilmCard film={promoFilm}/>

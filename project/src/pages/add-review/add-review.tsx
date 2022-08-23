@@ -8,10 +8,11 @@ import {useAppSelector} from '../../hooks';
 import {store} from '../../store';
 import {loadFilmAction} from '../../store/api-actions';
 import LoadingScreen from '../loading/loading';
+import {getSelectedFilm} from '../../store/films-process/selectors';
 
 function AddReview(): JSX.Element {
   const {id} = useParams();
-  const {selectedFilm} = useAppSelector((state) => state.FILMS);
+  const selectedFilm = useAppSelector(getSelectedFilm);
   const filmId = id ? id.replace(':', '') : '';
 
   if (!selectedFilm || selectedFilm.id.toString() !== filmId) {
