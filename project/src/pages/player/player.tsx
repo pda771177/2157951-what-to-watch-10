@@ -1,29 +1,43 @@
 import {useNavigate, useParams} from 'react-router-dom';
-import {TFilm} from '../../types/types';
-import {useAppSelector} from '../../hooks';
-import {store} from '../../store';
+import {useAppDispatch, useAppSelector} from '../../hooks';
 import LoadingScreen from '../loading/loading';
 import React, {SyntheticEvent, useRef, useState} from 'react';
 import {AppRoute} from '../../consts';
 import {loadFilmAction} from '../../store/api-actions';
-import {getAllFilms, getSelectedFilm} from '../../store/films-process/selectors';
+import {getLoadingStatus, getSelectedFilm} from '../../store/films-process/selectors';
+import {redirectToRoute} from '../../store/action';
 
 
 function Player(): JSX.Element {
-  const {id} = useParams();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const allFilmsList = useAppSelector(getAllFilms);
+  const video = useRef<HTMLVideoElement>(null);
+  const {id} = useParams();
+  const filmId = id ? id.replace(':', '') : '';
   const selectedFilm = useAppSelector(getSelectedFilm);
+  const isLoading = useAppSelector(getLoadingStatus);
+  const [film, setFilm] = useState(selectedFilm);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [watchProgressProcent, setWatchProgressProcent] = useState(0);
+  const isDataReady: boolean = !isLoading && (selectedFilm?.id.toString() === filmId || selectedFilm?.id === -1);
 
-  const unknownFilm = !id ? false : !allFilmsList.map((film: TFilm) => film.id.toString()).includes(id.toString());
-
-  if (unknownFilm) {
-    navigate(AppRoute.Unknown);
+  async function load() {
+    await dispatch(loadFilmAction(filmId));
+    setFilm(selectedFilm);
   }
 
-  const video = useRef<HTMLVideoElement>(null);
+  if (!isDataReady || !film) {
+    load();
+    return (
+      <LoadingScreen/>
+    );
+  } else if (film.id === -1) {
+    dispatch(redirectToRoute(AppRoute.Unknown));
+    return (
+      <LoadingScreen/>
+    );
+  }
 
-  const [isPlaying, setIsPlaying] = useState(false);
   const playClickListener = function (event: SyntheticEvent) {
     event.preventDefault();
     setIsPlaying(!isPlaying);
@@ -34,17 +48,6 @@ function Player(): JSX.Element {
     event.preventDefault();
     navigate(AppRoute.Main);
   };
-
-  const [watchProgressProcent, setWatchProgressProcent] = useState(0);
-
-  if (id && (!selectedFilm || selectedFilm.id.toString() !== id)) {
-    store.dispatch(loadFilmAction(id));
-    return (
-      <LoadingScreen/>
-    );
-  }
-
-  const filmToPlay: TFilm = selectedFilm ? selectedFilm : allFilmsList.filter((film: TFilm) => id === film.id.toString())[0];
 
   const getTimeFromMins = (mins: number): string => `${(Math.trunc(mins / 60))}:${(mins % 60)}:00`;
 
@@ -58,7 +61,7 @@ function Player(): JSX.Element {
   return (
     <div className="player">
 
-      <video className="player__video" src={filmToPlay.videoLink} ref={video} poster={filmToPlay.previewImage} onTimeUpdate={timeUpdateListener} autoPlay={isPlaying}></video>
+      <video className="player__video" src={film.videoLink} ref={video} poster={film.previewImage} onTimeUpdate={timeUpdateListener} autoPlay={isPlaying}></video>
 
       <button type="button" className="player__exit" onClick={exitClickListener}>Exit</button>
 
@@ -68,7 +71,7 @@ function Player(): JSX.Element {
             <progress className="player__progress" value={watchProgressProcent} max="100"></progress>
             <div className="player__toggler" style={{left: `${watchProgressProcent}%`}}>Toggler</div>
           </div>
-          <div className="player__time-value">{getTimeFromMins(filmToPlay.runTime)}</div>
+          <div className="player__time-value">{getTimeFromMins(film.runTime)}</div>
         </div>
 
         <div className="player__controls-row">
@@ -84,7 +87,7 @@ function Player(): JSX.Element {
             )}
             <span>Play</span>
           </button>
-          <div className="player__name">{filmToPlay.name}</div>
+          <div className="player__name">{film.name}</div>
 
           <button onClick={() => {video.current?.requestFullscreen();}} type="button" className="player__full-screen">
             <svg viewBox="0 0 27 27" width="27" height="27">

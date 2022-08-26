@@ -6,11 +6,13 @@ import {
   loadFilmAction,
   loadFilmCommentsAction,
   loadFilmsAction,
-  loadPromoFilmAction, loadSimilarFilmsAction,
+  loadPromoFilmAction,
+  loadSimilarFilmsAction,
   sendFilmCommentAction
 } from '../api-actions';
 import {NameSpace} from '../../consts';
 import {TFilmProcess} from '../../types/state';
+import {TFilm} from "../../types/types";
 
 
 const initialState: TFilmProcess = {
@@ -18,7 +20,6 @@ const initialState: TFilmProcess = {
   promoFilm: null,
   error: null,
   isDataLoaded: false,
-
   selectedFilm: null,
   similarFilms: [],
   filmComments: [],
@@ -38,6 +39,10 @@ export const filmsProcess = createSlice({
         state.allFilmsList = payload;
         state.isDataLoaded = false;
       })
+      .addCase(loadFilmsAction.rejected, (state) => {
+        state.allFilmsList = [];
+        state.isDataLoaded = false;
+      })
       .addCase(loadPromoFilmAction.pending, (state) => {
         state.isDataLoaded = true;
       })
@@ -45,11 +50,19 @@ export const filmsProcess = createSlice({
         state.promoFilm = payload;
         state.isDataLoaded = false;
       })
+      .addCase(loadPromoFilmAction.rejected, (state) => {
+        state.promoFilm = null;
+        state.isDataLoaded = false;
+      })
       .addCase(loadFilmAction.pending, (state) => {
         state.isDataLoaded = true;
       })
       .addCase(loadFilmAction.fulfilled, (state, {payload}) => {
         state.selectedFilm = payload;
+        state.isDataLoaded = false;
+      })
+      .addCase(loadFilmAction.rejected, (state) => {
+        state.selectedFilm = {id: -1} as TFilm;
         state.isDataLoaded = false;
       })
       .addCase(loadFavoritesAction.pending, (state) => {
@@ -81,6 +94,9 @@ export const filmsProcess = createSlice({
         state.favorites = payload;
         state.isDataLoaded = false;
       })
+      .addCase(changeFavoriteAction.rejected, (state) => {
+        state.isDataLoaded = false;
+      })
       .addCase(loadFilmCommentsAction.pending, (state) => {
         state.isDataLoaded = true;
       })
@@ -88,11 +104,18 @@ export const filmsProcess = createSlice({
         state.filmComments = payload;
         state.isDataLoaded = false;
       })
+      .addCase(loadFilmCommentsAction.rejected, (state) => {
+        state.filmComments = [];
+        state.isDataLoaded = false;
+      })
       .addCase(sendFilmCommentAction.pending, (state) => {
         state.isDataLoaded = true;
       })
       .addCase(sendFilmCommentAction.fulfilled, (state, {payload}) => {
         state.filmComments = payload;
+        state.isDataLoaded = false;
+      })
+      .addCase(sendFilmCommentAction.rejected, (state) => {
         state.isDataLoaded = false;
       });
   }

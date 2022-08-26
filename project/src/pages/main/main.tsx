@@ -20,7 +20,6 @@ function Main(): JSX.Element {
 
         <footer className="page-footer">
           <Logo light/>
-
           <Copyright/>
         </footer>
       </div>

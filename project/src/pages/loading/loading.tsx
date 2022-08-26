@@ -1,19 +1,18 @@
-import CSS from 'csstype'
+import Logo from '../../components/logo/logo';
+import Copyright from '../../components/copyright/copyright';
+import React from 'react';
 
 function LoadingScreen(): JSX.Element {
-  const style:CSS.Properties  = {
-    position: 'absolute',
-    top: 0,
-    right: 0,
-    bottom: 0,
-    left: 0,
-    backgroundColor: '#000',
-    opacity:0.5
-  }
-
   return (
-    <div style={style}>
-      <p>Loading ...</p>
+    <div className="page-content">
+      <div style={{marginTop: '25%', marginBottom: '25%'}}>
+        <img alt='Loading...' style={{display: 'block', margin: '0 auto'}} src='https://c.tenor.com/bZEUn3ywcQQAAAAd/stormcastle-count-down.gif'/>
+      </div>
+
+      <footer className="page-footer">
+        <Logo light/>
+        <Copyright/>
+      </footer>
     </div>
   );
 }

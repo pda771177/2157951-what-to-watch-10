@@ -1,4 +1,5 @@
 import React from 'react';
+import {AppRoute} from "../../consts";
 
 type LogoProps = {
   light?: boolean,
@@ -11,7 +12,7 @@ function Logo({light, letters}: LogoProps): JSX.Element {
 
   return (
     <div className="logo">
-      <a href="/" className={aClassName}>
+      <a href={AppRoute.Main} className={aClassName}>
         <span className="logo__letter logo__letter--1">{letters[0]}</span>
         <span className="logo__letter logo__letter--2">{letters[1]}</span>
         <span className="logo__letter logo__letter--3">{letters[2]}</span>

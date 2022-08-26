@@ -19,9 +19,9 @@ export type TFilm = {
 };
 
 export type TComment = {
-  comment: string
-  date: string
   id: number
+  date: string
+  comment: string
   rating: number
   user: {
     id: number
