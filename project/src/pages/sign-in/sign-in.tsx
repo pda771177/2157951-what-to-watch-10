@@ -2,7 +2,7 @@ import Logo from '../../components/logo/logo';
 import Copyright from '../../components/copyright/copyright';
 import {FormEvent, useRef} from 'react';
 import {useAppDispatch, useAppSelector} from '../../hooks';
-import {AuthData} from '../../types/auth-data';
+import {TAuthData} from '../../types/auth-data';
 import {loadFavoritesAction, loginAction} from '../../store/api-actions';
 import {AppRoute, MINIMAL_PASSWORD_LENGTH} from '../../consts';
 import {useNavigate} from 'react-router-dom';
@@ -20,7 +20,7 @@ function SignIn(): JSX.Element {
     navigate(AppRoute.Main);
   }
 
-  const onSubmit = (authData: AuthData) => {
+  const onSubmit = (authData: TAuthData) => {
     if (authData.password.length < MINIMAL_PASSWORD_LENGTH) {
       //alert("Password too weak. Minimal length is " + MINIMAL_PASSWORD_LENGTH.toString());
       return;

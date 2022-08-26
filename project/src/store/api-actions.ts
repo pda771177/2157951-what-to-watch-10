@@ -2,10 +2,11 @@ import {createAsyncThunk} from '@reduxjs/toolkit';
 import {AppDispatch, State} from '../types/state';
 import {AxiosInstance} from 'axios';
 import {APIRoute} from '../consts';
-import {AuthData} from '../types/auth-data';
-import {UserData} from '../types/user-data';
+import {TAuthData} from '../types/auth-data';
+import {TUserData} from '../types/user-data';
 import {dropUser, saveUser} from '../services/localStorageUser';
 import {TComment, TFilm} from '../types/types';
+
 
 export const loadFilmsAction = createAsyncThunk<TFilm[], undefined, {
   dispatch: AppDispatch,
@@ -51,9 +52,11 @@ export const loadFilmAction = createAsyncThunk<TFilm, string, {
 }>(
   'LOAD_FILM',
   async (filmId, {dispatch, extra: api}) => {
-    const {data} = await api.get<TFilm>(APIRoute.Film.replace(':id', filmId));
-    dispatch(loadFilmCommentsAction(filmId));
-    dispatch(loadSimilarFilmsAction(filmId));
+    const {status, data} = await api.get<TFilm>(APIRoute.Film.replace(':id', filmId));
+    if (status === 200){
+      dispatch(loadFilmCommentsAction(filmId));
+      dispatch(loadSimilarFilmsAction(filmId));
+    }
     return data;
   }
 );
@@ -118,18 +121,18 @@ export const checkAuthAction = createAsyncThunk<void, undefined, {
   }
 );
 
-export const loginAction = createAsyncThunk<void, AuthData, {
+export const loginAction = createAsyncThunk<void, TAuthData, {
   dispatch: AppDispatch,
   state: State,
   extra: AxiosInstance
 }>(
   'USER_LOGIN',
   async ({login: email, password}, {dispatch, extra: api}) => {
-    const {data: user} = await api.post<UserData>(APIRoute.Login, {email, password});
+    const {data: user} = await api.post<TUserData>(APIRoute.Login, {email, password});
     if (!user) {
       return;
     }
-    dispatch(loadFavoritesAction());
+    await dispatch(loadFavoritesAction());
     saveUser(user);
   }
 );
@@ -142,7 +145,7 @@ export const logoutAction = createAsyncThunk<void, undefined, {
   'USER_LOGOUT',
   async (_arg, {dispatch, extra: api}) => {
     await api.delete(APIRoute.Logout);
-    dispatch(loadFavoritesAction());
+    await dispatch(loadFavoritesAction());
     dropUser();
   },
 );

@@ -31,8 +31,7 @@ export enum AppRoute {
 
 export enum NameSpace {
   Films = 'FILMS',
-  Comments = 'COMMENTS',
-  User = 'USER',
+  User = 'USER'
 }
 
 export const TIMEOUT_SHOW_ERROR = 2000;
