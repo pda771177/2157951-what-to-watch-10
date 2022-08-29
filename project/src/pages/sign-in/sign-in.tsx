@@ -1,6 +1,6 @@
 import Logo from '../../components/logo/logo';
 import Copyright from '../../components/copyright/copyright';
-import {FormEvent, useRef} from 'react';
+import React, {FormEvent, useRef, useState} from 'react';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {TAuthData} from '../../types/auth-data';
 import {loadFavoritesAction, loginAction} from '../../store/api-actions';
@@ -11,6 +11,8 @@ import {checkUserAuthorization} from '../../store/user-process/selectors';
 function SignIn(): JSX.Element {
   const loginRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
+  const [isLoginCorrect, setIsLoginCorrect] = useState(false);
+  const [isPassCorrect, setIsPassCorrect] = useState(false);
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -20,13 +22,22 @@ function SignIn(): JSX.Element {
     navigate(AppRoute.Main);
   }
 
+  const onChangeLogin = function (event: React.ChangeEvent<HTMLInputElement>) {
+    const login = event.target.value;
+    login.includes('@') ? setIsLoginCorrect(true) : setIsLoginCorrect(false);
+  };
+
+  const onChangePass = function (event: React.ChangeEvent<HTMLInputElement>) {
+    const pass = event.target.value;
+    pass.length >= MINIMAL_PASSWORD_LENGTH ? setIsPassCorrect(true) : setIsPassCorrect(false);
+  };
+
   const onSubmit = (authData: TAuthData) => {
-    if (authData.password.length < MINIMAL_PASSWORD_LENGTH) {
-      //alert("Password too weak. Minimal length is " + MINIMAL_PASSWORD_LENGTH.toString());
+    if (!isPassCorrect || !isLoginCorrect) {
       return;
     }
     dispatch(loginAction(authData));
-    if (isAuthorized){
+    if (isAuthorized) {
       dispatch(loadFavoritesAction());
       navigate(AppRoute.Main);
     }
@@ -34,7 +45,6 @@ function SignIn(): JSX.Element {
 
   const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
-
     if (loginRef.current !== null && passwordRef.current !== null) {
       onSubmit({
         login: loginRef.current.value,
@@ -53,12 +63,12 @@ function SignIn(): JSX.Element {
       <div className="sign-in user-page__content">
         <form action="#" className="sign-in__form" onSubmit={handleSubmit}>
           <div className="sign-in__fields">
-            <div className="sign-in__field">
-              <input className="sign-in__input" type="email" placeholder="Email address" name="user-email" id="user-email" ref={loginRef}/>
+            <div className={isLoginCorrect ? 'sign-in__field' : 'sign-in__field sign-in__field--error'}>
+              <input onChange={onChangeLogin} className="sign-in__input" type="email" placeholder="Email address" name="user-email" id="user-email" ref={loginRef}/>
               <label className="sign-in__label visually-hidden" htmlFor="user-email">Email address</label>
             </div>
-            <div className="sign-in__field">
-              <input className="sign-in__input" type="password" placeholder="Password" name="user-password" id="user-password" ref={passwordRef}/>
+            <div className={isPassCorrect ? 'sign-in__field' : 'sign-in__field sign-in__field--error'}>
+              <input onChange={onChangePass} className="sign-in__input" type="password" placeholder="Password" name="user-password" id="user-password" ref={passwordRef}/>
               <label className="sign-in__label visually-hidden" htmlFor="user-password">Password</label>
             </div>
           </div>

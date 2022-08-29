@@ -4,15 +4,18 @@ import SmallFilmListSizer from '../small-film-list-sizer/small-film-list-sizer';
 import {TFilm} from '../../types/types';
 import {getAllFilms} from '../../store/films-process/selectors';
 
-function filterByGenre(filmsList: TFilm[], genre: string): TFilm[] {
+const MAX_GENRES_LENGTH = 9;
+
+const filterByGenre = (filmsList: TFilm[], genre: string): TFilm[] => {
   const resultFilms = filmsList.filter((film) => film.genre === genre);
   return resultFilms.length ? resultFilms : filmsList;
-}
+};
 
 function GenreSelector(): JSX.Element {
   const [genre, changeGenre] = useState('All genres');
   const allFilmsList = useAppSelector(getAllFilms);
-  const genres: Set<string> = new Set(allFilmsList.map((film) => film.genre));
+  const allGenres = [...new Set(allFilmsList.map((film) => film.genre))];
+  const genres = allGenres.slice(0, allGenres[MAX_GENRES_LENGTH] ? MAX_GENRES_LENGTH : allGenres.length).sort();
   const out = [];
   const result: JSX.Element[] = [];
   useAppDispatch();

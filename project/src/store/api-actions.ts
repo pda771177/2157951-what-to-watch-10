@@ -1,11 +1,12 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import {AppDispatch, State} from '../types/state';
 import {AxiosInstance} from 'axios';
-import {APIRoute} from '../consts';
+import {APIRoute, AppRoute} from '../consts';
 import {TAuthData} from '../types/auth-data';
 import {TUserData} from '../types/user-data';
 import {dropUser, saveUser} from '../services/localStorageUser';
 import {TComment, TFilm} from '../types/types';
+import {redirectToRoute} from './action';
 
 
 export const loadFilmsAction = createAsyncThunk<TFilm[], undefined, {
@@ -92,8 +93,12 @@ export const sendFilmCommentAction = createAsyncThunk<TComment[], { id: number, 
 }>(
   'SEND_FILM_COMMENT',
   async ({id, comment, rating}, {dispatch, extra: api}) => {
-    await api.post(APIRoute.SendComment.replace(':id', id.toString()), {comment, rating});
+    const {status} = await api.post(APIRoute.SendComment.replace(':id', id.toString()), {comment, rating});
     const {data} = await api.get<TComment[]>(APIRoute.FilmComments.replace(':id', id.toString()));
+    if (status === 200) {
+      const route = AppRoute.Film.replace(':id', id.toString());
+      dispatch(redirectToRoute(route));
+    }
     return data;
   }
 );

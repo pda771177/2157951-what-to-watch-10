@@ -34,7 +34,7 @@ function App(): JSX.Element {
           <Route path={AppRoute.MyList} element={<PrivateRoute><MyList/></PrivateRoute>}/>
           <Route path={AppRoute.Film} element={<Film/>}/>
           <Route path={AppRoute.AddReview} element={<PrivateRoute><AddReview/></PrivateRoute>}/>
-          <Route path={AppRoute.Player} element={<PrivateRoute><Player/></PrivateRoute>}/>
+          <Route path={AppRoute.Player} element={<Player/>}/>
         </Route>
         <Route path='*' element={<NotFound404 films={films.slice(0, 4)}/>}/>
       </Routes>

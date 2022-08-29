@@ -28,7 +28,7 @@ function StarRating({maxLevel, checked, onRatingChange}: StarRatingProps): JSX.E
   );
 }
 
-StarRating.defaultProps = {maxLevel: 10, checked: 8};
+StarRating.defaultProps = {maxLevel: 10, checked: 0};
 
 export default StarRating;
 
