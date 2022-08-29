@@ -9,6 +9,7 @@ import {store} from '../../store';
 import {loadFilmAction} from '../../store/api-actions';
 import LoadingScreen from '../loading/loading';
 import {getSelectedFilm} from '../../store/films-process/selectors';
+import {AppRoute} from '../../consts';
 
 function AddReview(): JSX.Element {
   const {id} = useParams();
@@ -21,6 +22,21 @@ function AddReview(): JSX.Element {
       <LoadingScreen/>
     );
   }
+
+  const breadcrumbsItems = [
+    {
+      title: 'Home',
+      path: AppRoute.Main
+    },
+    {
+      title: 'Film',
+      path: AppRoute.Film.replace(':id', filmId)
+    },
+    {
+      title: 'Add review',
+      path: ''
+    }
+  ];
 
   return (
     <section className="film-card film-card--full">
@@ -49,14 +65,3 @@ function AddReview(): JSX.Element {
 AddReview.defaultProps = {};
 
 export default AddReview;
-
-const breadcrumbsItems = [
-  {
-    title: 'Home',
-    path: '/'
-  },
-  {
-    title: 'Add review',
-    path: ''
-  }
-];

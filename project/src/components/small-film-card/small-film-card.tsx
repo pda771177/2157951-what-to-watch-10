@@ -1,29 +1,39 @@
 import {TFilm} from '../../types/types';
-import {Link} from 'react-router-dom';
-import React, {useState} from 'react';
+import {Link, useNavigate} from 'react-router-dom';
+import React, {SyntheticEvent, useState} from 'react';
 import Videoplayer from '../videoplayer/videoplayer';
+import {AppRoute} from '../../consts';
 
 type SmallFilmCardProps = {
   film: TFilm,
+  onMouseOver: ()=>void,
+  play?: boolean,
   imgWidth?: string,
   imgHeight?: string
 };
 
-function SmallFilmCard({film, imgWidth, imgHeight}: SmallFilmCardProps): JSX.Element {
+function SmallFilmCard({film, play, onMouseOver, imgWidth, imgHeight}: SmallFilmCardProps): JSX.Element {
   const {previewImage, name, id} = film;
+  const navigate = useNavigate();
   const [haveFocus, setHaveFocus] = useState(false);
 
   const changeFocus = () => {
     setHaveFocus(!haveFocus);
   };
 
+  const onLinkClick = function (event: SyntheticEvent) {
+    event.preventDefault();
+    navigate(AppRoute.Film.replace(':id', id.toString()));
+  };
+
   return (
-    <article className='small-film-card catalog__films-card'>
+    <article onClick={onLinkClick} onMouseOver={onMouseOver} className='small-film-card catalog__films-card'>
+      <div className='visually-hidden'>{play}</div>
       <div onMouseOver={changeFocus} onMouseLeave={changeFocus} className='small-film-card__image'>
         {haveFocus ? <Videoplayer film={film} width={Number(imgWidth)} height={Number(imgHeight)} delay={1000} autoPlay mute/> : <img src={previewImage} alt={name} width={imgWidth} height={imgHeight}/>}
       </div>
       <h3 className='small-film-card__title'>
-        <Link className='small-film-card__link' to={`/films/${id}`}>{name}</Link>
+        <Link className='small-film-card__link' onClick={onLinkClick} to='#'>{name}</Link>
       </h3>
     </article>
   );
@@ -31,4 +41,4 @@ function SmallFilmCard({film, imgWidth, imgHeight}: SmallFilmCardProps): JSX.Ele
 
 SmallFilmCard.defaultProps = {imgWidth: '280', imgHeight: '175'};
 
-export default React.memo(SmallFilmCard, (prevProps, nextProps) => prevProps.film === nextProps.film && prevProps.imgWidth === nextProps.imgWidth && prevProps.imgHeight === nextProps.imgHeight);
+export default React.memo(SmallFilmCard, (prevProps, nextProps) => prevProps.film === nextProps.film && prevProps.play === nextProps.play && prevProps.imgWidth === nextProps.imgWidth && prevProps.imgHeight === nextProps.imgHeight);

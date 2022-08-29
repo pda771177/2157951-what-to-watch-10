@@ -12,6 +12,10 @@ function UserBlock(): JSX.Element {
 
   const dispatch = useAppDispatch();
 
+  const onAvatarClick = () => {
+    navigate(AppRoute.MyList);
+  };
+
   const onLogoutClick = () => {
     navigate(AppRoute.Main);
     dispatch(logoutAction());
@@ -34,7 +38,7 @@ function UserBlock(): JSX.Element {
         {
           <React.Fragment>
             <li className="user-block__item">
-              <div className="user-block__avatar">
+              <div onClick={onAvatarClick} className="user-block__avatar">
                 <img src={avatarUrl} alt="User avatar" width="63" height="63"/>
               </div>
             </li>
