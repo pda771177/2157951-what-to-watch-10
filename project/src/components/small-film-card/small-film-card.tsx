@@ -1,8 +1,10 @@
 import {TFilm} from '../../types/types';
-import {Link, useNavigate} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import React, {SyntheticEvent, useState} from 'react';
 import Videoplayer from '../videoplayer/videoplayer';
 import {AppRoute} from '../../consts';
+import {useAppDispatch} from '../../hooks';
+import {redirectToRoute} from '../../store/action';
 
 type SmallFilmCardProps = {
   film: TFilm,
@@ -14,7 +16,7 @@ type SmallFilmCardProps = {
 
 function SmallFilmCard({film, play, onMouseOver, imgWidth, imgHeight}: SmallFilmCardProps): JSX.Element {
   const {previewImage, name, id} = film;
-  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const [haveFocus, setHaveFocus] = useState(false);
 
   const changeFocus = () => {
@@ -23,7 +25,7 @@ function SmallFilmCard({film, play, onMouseOver, imgWidth, imgHeight}: SmallFilm
 
   const onLinkClick = function (event: SyntheticEvent) {
     event.preventDefault();
-    navigate(AppRoute.Film.replace(':id', id.toString()));
+    dispatch(redirectToRoute(AppRoute.Film.replace(':id', id.toString())));
   };
 
   return (
@@ -38,7 +40,6 @@ function SmallFilmCard({film, play, onMouseOver, imgWidth, imgHeight}: SmallFilm
     </article>
   );
 }
-
 SmallFilmCard.defaultProps = {imgWidth: '280', imgHeight: '175'};
 
 export default React.memo(SmallFilmCard, (prevProps, nextProps) => prevProps.film === nextProps.film && prevProps.play === nextProps.play && prevProps.imgWidth === nextProps.imgWidth && prevProps.imgHeight === nextProps.imgHeight);

@@ -16,6 +16,5 @@ function SignInRoute({children}: SignInRouteProps): JSX.Element {
     !isAutorized ? children : <Navigate to={AppRoute.Main}/>
   );
 }
-SignInRoute.defaultProps = {};
 
 export default SignInRoute;

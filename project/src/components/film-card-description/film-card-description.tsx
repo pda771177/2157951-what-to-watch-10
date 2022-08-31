@@ -1,7 +1,9 @@
 import {TFilm} from '../../types/types';
-import {useNavigate} from 'react-router-dom';
 import {AppRoute} from '../../consts';
 import MyListButton from '../my-list-button/my-list-button';
+import {useAppDispatch} from '../../hooks';
+import {redirectToRoute} from '../../store/action';
+import React from 'react';
 
 type FilmCardDescriptionProps = {
   film: TFilm
@@ -10,16 +12,16 @@ type FilmCardDescriptionProps = {
 
 function FilmCardDescription({film, review}: FilmCardDescriptionProps): JSX.Element {
   const {id, name, genre, released} = film;
-  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const reviewClassName = review === true ? 'btn film-card__button' : 'btn film-card__button visually-hidden';
 
   const onPlayClick = () => {
-    navigate(AppRoute.Player.replace(':id', film.id.toString()));
+    dispatch(redirectToRoute(AppRoute.Player.replace(':id', film.id.toString())));
   };
 
   const onAddReviewClick = () => {
-    navigate(AppRoute.AddReview.replace(':id', film.id.toString()));
+    dispatch(redirectToRoute(AppRoute.AddReview.replace(':id', film.id.toString())));
   };
 
   return (
@@ -34,7 +36,7 @@ function FilmCardDescription({film, review}: FilmCardDescriptionProps): JSX.Elem
       <div className="film-card__buttons">
         <button onClick={onPlayClick} className="btn btn--play film-card__button" type="button">
           <svg viewBox="0 0 19 19" width="19" height="19">
-            <use xlinkHref="#play-s"></use>
+            <use xlinkHref="#play-s"/>
           </svg>
           <span>Play</span>
         </button>
@@ -44,7 +46,5 @@ function FilmCardDescription({film, review}: FilmCardDescriptionProps): JSX.Elem
     </div>
   );
 }
-
-FilmCardDescription.defaultProps = {};
 
 export default FilmCardDescription;

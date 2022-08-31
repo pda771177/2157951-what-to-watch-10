@@ -25,6 +25,4 @@ function SmallFilmListSizer({films}: SmallFilmListSizerProps): JSX.Element {
   );
 }
 
-SmallFilmListSizer.defaultProps = {};
-
 export default SmallFilmListSizer;

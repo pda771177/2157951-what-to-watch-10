@@ -1,7 +1,7 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import {AppDispatch, State} from '../types/state';
 import {AxiosInstance} from 'axios';
-import {APIRoute, AppRoute} from '../consts';
+import {APIRoute, AppRoute, HTTP_POSITIVE_RESPONSE_CODE} from '../consts';
 import {TAuthData} from '../types/auth-data';
 import {TUserData} from '../types/user-data';
 import {dropUser, saveUser} from '../services/localStorageUser';
@@ -54,7 +54,7 @@ export const loadFilmAction = createAsyncThunk<TFilm, string, {
   'LOAD_FILM',
   async (filmId, {dispatch, extra: api}) => {
     const {status, data} = await api.get<TFilm>(APIRoute.Film.replace(':id', filmId));
-    if (status === 200){
+    if (status === HTTP_POSITIVE_RESPONSE_CODE){
       dispatch(loadFilmCommentsAction(filmId));
       dispatch(loadSimilarFilmsAction(filmId));
     }
@@ -95,7 +95,7 @@ export const sendFilmCommentAction = createAsyncThunk<TComment[], { id: number, 
   async ({id, comment, rating}, {dispatch, extra: api}) => {
     const {status} = await api.post(APIRoute.SendComment.replace(':id', id.toString()), {comment, rating});
     const {data} = await api.get<TComment[]>(APIRoute.FilmComments.replace(':id', id.toString()));
-    if (status === 200) {
+    if (status === HTTP_POSITIVE_RESPONSE_CODE) {
       const route = AppRoute.Film.replace(':id', id.toString());
       dispatch(redirectToRoute(route));
     }

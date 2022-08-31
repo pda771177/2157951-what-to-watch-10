@@ -3,6 +3,7 @@ import StarRating from '../star-rating/star-rating';
 import {TFilm} from '../../types/types';
 import {store} from '../../store';
 import {sendFilmCommentAction} from '../../store/api-actions';
+import './review-form.css';
 
 const MIN_REVIEW_LENGTH = 50;
 const MAX_REVIEW_LENGTH = 400;
@@ -42,7 +43,7 @@ function ReviewForm({film}: ReviewFormProps): JSX.Element {
         <div className="add-review__text">
           <textarea onChange={textChangeListener} value={comment} className="add-review__textarea" name="review-text" id="review-text" placeholder="Review text"/>
           <div className="add-review__submit">
-            <button className="add-review__btn" style={{opacity: isTextLengthCorrect && rating >= MIN_RATING ? '100%' : '50%'}} type="submit">Post</button>
+            <button className={isTextLengthCorrect && rating >= MIN_RATING ? 'add-review__btn' : 'add-review__btn add-review__btn-disabled'} type="submit">Post</button>
           </div>
         </div>
       </form>

@@ -15,6 +15,5 @@ function ShowMoreButton({onClick, visible}: ShowMoreButtonProps): JSX.Element {
     </div>
   );
 }
-ShowMoreButton.defaultProps = {};
 
 export default ShowMoreButton;

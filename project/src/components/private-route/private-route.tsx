@@ -16,6 +16,4 @@ function PrivateRoute({children}: PrivateRouteProps): JSX.Element {
   );
 }
 
-PrivateRoute.defaultProps = {};
-
 export default PrivateRoute;

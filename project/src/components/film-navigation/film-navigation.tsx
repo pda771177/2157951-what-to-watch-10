@@ -39,6 +39,5 @@ function FilmNavigation({film, comments}: FilmNavigationProps): JSX.Element {
     </>
   );
 }
-FilmNavigation.defaultProps = {};
 
 export default FilmNavigation;

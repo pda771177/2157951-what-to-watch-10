@@ -4,32 +4,33 @@ import React, {FormEvent, useRef, useState} from 'react';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {TAuthData} from '../../types/auth-data';
 import {loadFavoritesAction, loginAction} from '../../store/api-actions';
-import {AppRoute, MINIMAL_PASSWORD_LENGTH} from '../../consts';
-import {useNavigate} from 'react-router-dom';
+import {AppRoute, RegExps} from '../../consts';
 import {checkUserAuthorization} from '../../store/user-process/selectors';
+import {redirectToRoute} from '../../store/action';
 
 function SignIn(): JSX.Element {
   const loginRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
   const [isLoginCorrect, setIsLoginCorrect] = useState(false);
   const [isPassCorrect, setIsPassCorrect] = useState(false);
+  const [autorizationFail, setAutorizationFail] = useState(false);
 
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+
   const isAuthorized = useAppSelector(checkUserAuthorization);
 
   if (isAuthorized) {
-    navigate(AppRoute.Main);
+    dispatch(redirectToRoute(AppRoute.Main));
   }
 
   const onChangeLogin = function (event: React.ChangeEvent<HTMLInputElement>) {
     const login = event.target.value;
-    login.includes('@') ? setIsLoginCorrect(true) : setIsLoginCorrect(false);
+    RegExps.login.test(login) ? setIsLoginCorrect(true) : setIsLoginCorrect(false);
   };
 
   const onChangePass = function (event: React.ChangeEvent<HTMLInputElement>) {
     const pass = event.target.value;
-    pass.length >= MINIMAL_PASSWORD_LENGTH ? setIsPassCorrect(true) : setIsPassCorrect(false);
+    RegExps.password.test(pass) ? setIsPassCorrect(true) : setIsPassCorrect(false);
   };
 
   const onSubmit = (authData: TAuthData) => {
@@ -39,7 +40,9 @@ function SignIn(): JSX.Element {
     dispatch(loginAction(authData));
     if (isAuthorized) {
       dispatch(loadFavoritesAction());
-      navigate(AppRoute.Main);
+      dispatch(redirectToRoute(AppRoute.Main));
+    }else {
+      setAutorizationFail(true);
     }
   };
 
@@ -63,6 +66,11 @@ function SignIn(): JSX.Element {
       <div className="sign-in user-page__content">
         <form action="#" className="sign-in__form" onSubmit={handleSubmit}>
           <div className="sign-in__fields">
+            {autorizationFail && (
+              <div className="sign-in__message">
+                <p>Autorization error, please check your login and password, and try again</p>
+              </div>
+            )}
             <div className={isLoginCorrect ? 'sign-in__field' : 'sign-in__field sign-in__field--error'}>
               <input onChange={onChangeLogin} className="sign-in__input" type="email" placeholder="Email address" name="user-email" id="user-email" ref={loginRef}/>
               <label className="sign-in__label visually-hidden" htmlFor="user-email">Email address</label>

@@ -42,6 +42,4 @@ function Details({film}: DetailsProps): JSX.Element {
   );
 }
 
-Details.defaultProps = {};
-
 export default Details;

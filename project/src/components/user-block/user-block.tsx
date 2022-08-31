@@ -1,28 +1,27 @@
 import React from 'react';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {AppRoute} from '../../consts';
-import {useNavigate} from 'react-router-dom';
 import {logoutAction} from '../../store/api-actions';
 import {getUser} from '../../services/localStorageUser';
 import {checkUserAuthorization} from '../../store/user-process/selectors';
+import {redirectToRoute} from '../../store/action';
 
 function UserBlock(): JSX.Element {
   const isAuthorized = useAppSelector(checkUserAuthorization);
-  const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
 
   const onAvatarClick = () => {
-    navigate(AppRoute.MyList);
+    dispatch(redirectToRoute(AppRoute.MyList));
   };
 
   const onLogoutClick = () => {
-    navigate(AppRoute.Main);
+    dispatch(redirectToRoute(AppRoute.Main));
     dispatch(logoutAction());
   };
 
   const onSignInClick = () => {
-    navigate(AppRoute.SignIn);
+    dispatch(redirectToRoute(AppRoute.SignIn));
   };
 
   let avatarUrl: string | null;

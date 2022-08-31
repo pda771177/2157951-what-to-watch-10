@@ -4,6 +4,7 @@ import SmallFilmsList from '../../components/small-films-list/small-films-list';
 import Copyright from '../../components/copyright/copyright';
 import {useAppSelector} from '../../hooks';
 import {getFavorites} from '../../store/films-process/selectors';
+import React from 'react';
 
 function MyList(): JSX.Element {
   const favorites = useAppSelector(getFavorites);
@@ -28,7 +29,6 @@ function MyList(): JSX.Element {
     </div>
   );
 }
-
 MyList.defaultProps = {myFilms: []};
 
 export default MyList;

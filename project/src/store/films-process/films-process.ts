@@ -10,15 +10,12 @@ import {
   loadSimilarFilmsAction,
   sendFilmCommentAction
 } from '../api-actions';
-import {NameSpace} from '../../consts';
+import {NameSpace, UNKNOWN_FILM} from '../../consts';
 import {TFilmProcess} from '../../types/state';
-import {TFilm} from "../../types/types";
-
 
 const initialState: TFilmProcess = {
   allFilmsList: [],
   promoFilm: null,
-  error: null,
   isDataLoaded: false,
   selectedFilm: null,
   similarFilms: [],
@@ -62,7 +59,7 @@ export const filmsProcess = createSlice({
         state.isDataLoaded = false;
       })
       .addCase(loadFilmAction.rejected, (state) => {
-        state.selectedFilm = {id: -1} as TFilm;
+        state.selectedFilm = UNKNOWN_FILM;
         state.isDataLoaded = false;
       })
       .addCase(loadFavoritesAction.pending, (state) => {

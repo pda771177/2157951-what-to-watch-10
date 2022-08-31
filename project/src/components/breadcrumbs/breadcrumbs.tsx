@@ -31,14 +31,3 @@ function Breadcrumbs({pathItems}: BreadcrumbsProps): JSX.Element {
 Breadcrumbs.defaultProps = {pathItems: [{title: 'Home', path: '/'}]};
 
 export default Breadcrumbs;
-
-// const bu = [
-//   {
-//     title: 'The Grand Budapest Hotel',
-//     path: 'film-page.html'
-//   },
-//   {
-//     title: 'Add review',
-//     path: ''
-//   }
-// ]
