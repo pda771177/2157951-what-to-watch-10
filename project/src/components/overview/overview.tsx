@@ -19,6 +19,4 @@ function Overview({film}: OverviewProps): JSX.Element {
   );
 }
 
-Overview.defaultProps = {};
-
 export default Overview;

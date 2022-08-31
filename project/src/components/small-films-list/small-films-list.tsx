@@ -30,6 +30,4 @@ function SmallFilmsList({films}: SmallFilmsListProps): JSX.Element {
   );
 }
 
-SmallFilmsList.defaultProps = {};
-
 export default SmallFilmsList;

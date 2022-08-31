@@ -1,0 +1,9 @@
+.not-found-404-page__content-logo-wrapper {
+    float: left;
+    margin-right: 1em
+}
+
+.not-found-404-page__content-text-wrapper {
+    line-height: 0.5em;
+    margin-bottom: 3em
+}

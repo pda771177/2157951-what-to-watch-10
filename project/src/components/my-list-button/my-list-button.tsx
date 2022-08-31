@@ -1,12 +1,11 @@
 import React from 'react';
 import {AppRoute} from '../../consts';
-import {useAppSelector} from '../../hooks';
-import {useNavigate} from 'react-router-dom';
+import {useAppDispatch, useAppSelector} from '../../hooks';
 import {TFilm} from '../../types/types';
 import {changeFavoriteAction, loadFavoritesAction} from '../../store/api-actions';
-import {store} from '../../store';
 import {checkUserAuthorization} from '../../store/user-process/selectors';
-import {getFavorites} from "../../store/films-process/selectors";
+import {getFavorites} from '../../store/films-process/selectors';
+import {redirectToRoute} from '../../store/action';
 
 type MyListButtonProps = {
   film: TFilm
@@ -15,7 +14,8 @@ type MyListButtonProps = {
 function MyListButton({film}: MyListButtonProps): JSX.Element {
   const isAutorized = useAppSelector(checkUserAuthorization);
   const favorites = useAppSelector(getFavorites);
-  const navigate = useNavigate();
+
+  const dispatch = useAppDispatch();
 
   let isInFavorites: boolean;
   try {
@@ -35,10 +35,10 @@ function MyListButton({film}: MyListButtonProps): JSX.Element {
   );
 
   const onClick = isAutorized ? () => {
-    store.dispatch(changeFavoriteAction({filmId: film.id, favorite: !isInFavorites}));
-    store.dispatch(loadFavoritesAction());
-    navigate(AppRoute.MyList);
-  } : () => navigate(AppRoute.SignIn);
+    dispatch(changeFavoriteAction({filmId: film.id, favorite: !isInFavorites}));
+    dispatch(loadFavoritesAction());
+    dispatch(redirectToRoute(AppRoute.MyList));
+  } : () => dispatch(redirectToRoute(AppRoute.SignIn));
 
   return (
     <button onClick={onClick} className="btn btn--list film-card__button" type="button">
@@ -48,7 +48,5 @@ function MyListButton({film}: MyListButtonProps): JSX.Element {
     </button>
   );
 }
-
-MyListButton.defaultProps = {};
 
 export default MyListButton;

@@ -20,7 +20,6 @@ function Reviews({comments}: ReviewsProps): JSX.Element {
   const leftColumn = leftComments.map((comment) => (<Review key={comment.id} review={comment}/>));
   const rightColumn = rightComments.map((comment) => (<Review key={comment.id} review={comment}/>));
 
-
   return (
     <div className="film-card__reviews film-card__row">
       <div className="film-card__reviews-col">
@@ -32,7 +31,5 @@ function Reviews({comments}: ReviewsProps): JSX.Element {
     </div>
   );
 }
-
-Reviews.defaultProps = {};
 
 export default Reviews;

@@ -14,7 +14,7 @@ import MyList from "../../pages/my-list/my-list";
 import Film from "../../pages/film/film";
 import AddReview from "../../pages/add-review/add-review";
 import Player from "../../pages/player/player";
-import NotFound404 from "../../pages/404-not-found/404-not-found";
+import NotFound404 from "../../pages/not-found-404/not-found-404";
 import HistoryRouter from "../history-router/history-router";
 import React from "react";
 

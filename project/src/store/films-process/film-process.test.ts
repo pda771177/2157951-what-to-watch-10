@@ -18,7 +18,6 @@ describe('Reducer: films', () => {
     state = {
       allFilmsList: [],
       promoFilm: null,
-      error: null,
       isDataLoaded: false,
       selectedFilm: null,
       similarFilms: [],

@@ -2,26 +2,21 @@ import Logo from '../../components/logo/logo';
 import UserBlock from '../../components/user-block/user-block';
 import Breadcrumbs from '../../components/breadcrumbs/breadcrumbs';
 import {useParams} from 'react-router-dom';
-import React from 'react';
+import React, {useEffect} from 'react';
 import ReviewForm from '../../components/review-form/review-form';
-import {useAppSelector} from '../../hooks';
-import {store} from '../../store';
+import {useAppDispatch, useAppSelector} from '../../hooks';
 import {loadFilmAction} from '../../store/api-actions';
-import LoadingScreen from '../loading/loading';
-import {getSelectedFilm} from '../../store/films-process/selectors';
-import {AppRoute} from '../../consts';
+import Loading from '../loading/loading';
+import {getLoadingStatus, getSelectedFilm} from '../../store/films-process/selectors';
+import {AppRoute, UNKNOWN_FILM} from '../../consts';
+import {redirectToRoute} from '../../store/action';
 
 function AddReview(): JSX.Element {
   const {id} = useParams();
-  const selectedFilm = useAppSelector(getSelectedFilm);
   const filmId = id ? id.replace(':', '') : '';
-
-  if (!selectedFilm || selectedFilm.id.toString() !== filmId) {
-    store.dispatch(loadFilmAction(filmId));
-    return (
-      <LoadingScreen/>
-    );
-  }
+  const selectedFilm = useAppSelector(getSelectedFilm);
+  const dispatch = useAppDispatch();
+  const isLoading = useAppSelector(getLoadingStatus);
 
   const breadcrumbsItems = [
     {
@@ -38,6 +33,21 @@ function AddReview(): JSX.Element {
     }
   ];
 
+  useEffect(() => {
+    if (!selectedFilm || selectedFilm?.id.toString() !== filmId){
+      (async () => {
+        await dispatch(loadFilmAction(filmId));
+        if (selectedFilm?.id === UNKNOWN_FILM.id){
+          dispatch(redirectToRoute(AppRoute.Unknown));
+        }
+      })();
+    }
+  }, [dispatch, id]);
+  if (isLoading || !selectedFilm || selectedFilm?.id === UNKNOWN_FILM.id) {
+    return (
+      <Loading/>
+    );
+  }
   return (
     <section className="film-card film-card--full">
       <div className="film-card__header">
@@ -61,7 +71,5 @@ function AddReview(): JSX.Element {
     </section>
   );
 }
-
-AddReview.defaultProps = {};
 
 export default AddReview;

@@ -1,5 +1,5 @@
 import React from 'react';
-import {AppRoute} from "../../consts";
+import {AppRoute} from '../../consts';
 
 type LogoProps = {
   light?: boolean,

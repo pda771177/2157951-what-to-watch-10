@@ -1,3 +1,5 @@
+import React from 'react';
+
 type FilmRatingProps = {
   ratingScore: number,
   voted: number
@@ -17,8 +19,6 @@ function FilmRating({ratingScore, voted}: FilmRatingProps): JSX.Element {
   );
 }
 
-FilmRating.defaultProps = {};
-
 export default FilmRating;
 
 class Rating {
@@ -33,11 +33,11 @@ class Rating {
   private readonly _textRating: string;
   private readonly _numRating: number;
   private scores = {
-    'Bad': new ScoreDiapazon(0, 3),
-    'Normal': new ScoreDiapazon(3, 5),
-    'Good': new ScoreDiapazon(5, 8),
-    'Very good': new ScoreDiapazon(8, 10),
-    'Awesome': new ScoreDiapazon(10, 10.01)
+    'Bad': new ScoreRange(0, 3),
+    'Normal': new ScoreRange(3, 5),
+    'Good': new ScoreRange(5, 8),
+    'Very good': new ScoreRange(8, 10),
+    'Awesome': new ScoreRange(10, 10.01)
   };
 
   constructor(score: number) {
@@ -47,7 +47,7 @@ class Rating {
 
   public getTextRating(): string {
     try {
-      const [[textRating]] = (Object.entries(this.scores).filter(([text, diapazon]) => diapazon.includes(this._numRating)));
+      const [[textRating]] = (Object.entries(this.scores).filter(([text, range]) => range.includes(this._numRating)));
       return textRating;
     } catch (e) {
       return 'Unknown';
@@ -55,7 +55,7 @@ class Rating {
   }
 }
 
-class ScoreDiapazon {
+class ScoreRange {
   private readonly from: number;
   private readonly to: number;
 

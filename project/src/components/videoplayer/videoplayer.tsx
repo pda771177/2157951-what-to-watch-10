@@ -33,7 +33,6 @@ function Videoplayer({film, width, height, autoPlay, delay = 0, mute}: Videoplay
     <video src={film.videoLink} ref={videoRef} poster={film.previewImage} height={height} width={width} autoPlay={autoPlay} muted={mute} />
   );
 }
-
 Videoplayer.defaultProps = {delay: 0, muted: true};
 
 export default Videoplayer;

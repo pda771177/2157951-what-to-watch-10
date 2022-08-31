@@ -13,7 +13,6 @@ export type TUserProcess = {
 export type TFilmProcess = {
   allFilmsList: TFilm[],
   promoFilm: TFilm | null,
-  error: string | null,
   isDataLoaded: boolean,
   selectedFilm: TFilm | null,
   similarFilms: TFilm[] | [],

@@ -3,8 +3,7 @@ import {useAppDispatch, useAppSelector} from '../../hooks';
 import SmallFilmListSizer from '../small-film-list-sizer/small-film-list-sizer';
 import {TFilm} from '../../types/types';
 import {getAllFilms} from '../../store/films-process/selectors';
-
-const MAX_GENRES_LENGTH = 9;
+import {MAX_GENRES_LENGTH} from '../../consts';
 
 const filterByGenre = (filmsList: TFilm[], genre: string): TFilm[] => {
   const resultFilms = filmsList.filter((film) => film.genre === genre);
@@ -45,7 +44,5 @@ function GenreSelector(): JSX.Element {
     </React.Fragment>
   );
 }
-
-GenreSelector.defaultProps = {};
 
 export default GenreSelector;

@@ -1,10 +1,10 @@
+import {TFilm} from './types/types';
+
 export enum AuthorizationStatus {
   Auth = 'AUTH',
   NoAuth = 'NO_AUTH',
   Unknown = 'UNKNOWN'
 }
-
-export const MINIMAL_PASSWORD_LENGTH = 1;
 
 export enum APIRoute {
   PromoFilm = '/promo',
@@ -34,4 +34,15 @@ export enum NameSpace {
   User = 'USER'
 }
 
-export const TIMEOUT_SHOW_ERROR = 2000;
+export const RegExps = {
+  login: /^[-\w.]+@([A-z0-9][-A-z0-9]+\.)+[A-z]{2,4}$/,
+  password: /^.*(?=.{2,})(?=.*\d)((?=.*[a-z])|(?=.*[A-Z])).*$/i
+};
+
+export const HTTP_POSITIVE_RESPONSE_CODE = 200;
+
+export const UNKNOWN_FILM = {
+  id: -1
+} as TFilm;
+
+export const MAX_GENRES_LENGTH = 9;

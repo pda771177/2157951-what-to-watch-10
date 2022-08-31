@@ -7,7 +7,7 @@ import AddReview from '../../pages/add-review/add-review';
 import PrivateRoute from '../private-route/private-route';
 import {AppRoute} from '../../consts';
 import MyList from '../../pages/my-list/my-list';
-import NotFound404 from '../../pages/404-not-found/404-not-found';
+import NotFound404 from '../../pages/not-found-404/not-found-404';
 import {useAppSelector} from '../../hooks';
 import Loading from '../../pages/loading/loading';
 import HistoryRouter from '../history-router/history-router';

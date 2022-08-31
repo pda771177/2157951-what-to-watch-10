@@ -25,6 +25,5 @@ function Review({review}: ReviewProps): JSX.Element {
     </div>
   );
 }
-Review.defaultProps = {};
 
 export default Review;
